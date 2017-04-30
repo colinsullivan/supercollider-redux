@@ -13,7 +13,8 @@
  *
  *  @classdesc    Provides a singleton state store which expects to receive
  *  state from OSC messages sent over the StateStore API (see apis/).  Also
- *  dispatches actions back up to the primary state store.
+ *  dispatches actions back up to the primary state store and publishes
+ *  state updates to all local subscriber functions.
  **/
 StateStore {
   classvar <>instance;
@@ -26,11 +27,6 @@ StateStore {
     ^super.new.init(initialState);
   }
   *getInstance {
-
-    //"TawController.getInstance".postln();
-
-    //"this.instance:".postln;
-    //this.instance.postln;
     if (this.instance == nil, {
       this.instance = StateStore.new(());
     });
@@ -66,8 +62,6 @@ StateStore {
 
   setState {
     arg newState;
-
-    //"setState".postln();
 
     state = newState;
 
