@@ -1,0 +1,61 @@
+{
+  "name": "supercollider-redux",
+  "version": "0.0.1",
+  "description": "State synchronization between a replica SuperCollider state store and a primary Redux state store.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinsullivan/supercollider-redux.git"
+  },
+  "keywords": [
+    "node.js",
+    "supercollider",
+    "sclang",
+    "redux"
+  ],
+  "author": "Colin Sullivan <colin [at] colin-sullivan.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/colinsullivan/supercollider-redux/issues"
+  },
+  "homepage": "https://github.com/colinsullivan/supercollider-redux#readme",
+  "dependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "redux": "^3.6.0",
+    "supercolliderjs": "^0.14.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.3.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "impliedStrict": true
+      }
+    },
+    "env": {
+      "browser": false,
+      "node": true,
+      "es6": true,
+      "mocha": true
+    },
+    "rules": {
+      "no-console": 0,
+      "no-use-before-define": "error",
+      "block-scoped-var": "error"
+    }
+  }
+}
