@@ -16,7 +16,10 @@
     var store = StateStore.getInstance();
     "StateStore.api.init".postln();
     store.setState(initialState);
-    reply.value((status: "ok"));
+    store.dispatch((
+      type: "SUPERCOLLIDER_READY"
+    ));
+    reply.value();
   },
   setState: {
     arg reply, state;
