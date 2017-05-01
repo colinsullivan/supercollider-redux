@@ -82,13 +82,14 @@ class SCStoreController {
   }
   handleStoreChanged() {
     var state = this.store.getState();
+    //console.log("handleStoreChanged");
     // send all state changes to sclang process
-    if (state.scStateStoreReadyState == "READY") {
-      //console.log("calling taw.setState with");
-      //console.log("state");
-      //console.log(JSON.stringify(state, " ", 4));
-      this.call("StateStore.setState", [state]);
-    }
+    //if (state.scStateStoreReadyState == "READY") {
+    //console.log("calling StateStore.setState with");
+    //console.log("state");
+    //console.log(JSON.stringify(state, " ", 4));
+    this.call("StateStore.setState", [state]);
+    //}
 
   }
   getAPICallIndex () {

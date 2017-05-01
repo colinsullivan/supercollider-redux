@@ -2,9 +2,9 @@
   "name": "supercollider-redux",
   "version": "0.0.1",
   "description": "State synchronization between a replica SuperCollider state store and a primary Redux state store.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-register"
+    "test": "mocha --compilers js:babel-register ./src/"
   },
   "repository": {
     "type": "git",

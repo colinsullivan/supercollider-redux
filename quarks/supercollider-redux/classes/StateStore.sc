@@ -52,8 +52,8 @@ StateStore {
   }
 
   subscribe {
-    arg newSubscriber;
-    subscribers.add(newSubscriber);
+    arg func;
+    subscribers.add(func);
   }
 
   getState {
@@ -68,7 +68,7 @@ StateStore {
     subscribers.do({
       arg subscriber;
 
-      subscriber.handleStateChange();
+      subscriber.value();
     });
   }
 }

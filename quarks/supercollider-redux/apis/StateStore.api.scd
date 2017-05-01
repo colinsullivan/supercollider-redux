@@ -17,14 +17,14 @@
     "StateStore.api.init".postln();
     store.setState(initialState);
     store.dispatch((
-      type: "SUPERCOLLIDER_READY"
+      type: "SUPERCOLLIDER-REDUX_SUPERCOLLIDER_READY"
     ));
     reply.value();
   },
   setState: {
     arg reply, state;
     var store = StateStore.getInstance();
-    //"taw.api.setState".postln;
+    "StateStore.api.setState".postln;
     store.setState(state);
     reply.value();
   }
