@@ -4,7 +4,7 @@
   "description": "State synchronization between a replica SuperCollider state store and a primary Redux state store.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-register ./src/",
+    "test": "mocha --compilers js:babel-register",
     "build": "rm -Rf lib && babel src --out-dir lib"
   },
   "repository": {

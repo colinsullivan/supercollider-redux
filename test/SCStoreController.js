@@ -10,8 +10,7 @@
 
 import sc from "supercolliderjs"
 import osc from "node-osc"
-
-import * as actions from "./actions"
+import supercolliderRedux from "../"
 
 /**
  *  @class        SCStoreController
@@ -49,7 +48,7 @@ class SCStoreController {
     });
 
     // we're starting our journey!
-    this.store.dispatch(actions.supercolliderInitStarted());
+    this.store.dispatch(supercolliderRedux.actions.supercolliderInitStarted());
     
     // reads config file located at: ./.supercollider.yaml
     var api = new sc.scapi();

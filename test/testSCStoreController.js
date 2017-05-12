@@ -12,15 +12,15 @@
 import path from "path"
 import chai from "chai"
 import { createStore } from "redux"
-import rootReducer from "./lib/reducers"
+import supercolliderRedux from "../"
 
 import sc from "supercolliderjs"
 
-import SCStoreController from "./lib/SCStoreController"
+import SCStoreController from "./SCStoreController"
 const expect = chai.expect;
 
 function configure_store () {
-  return createStore(rootReducer);
+  return createStore(supercolliderRedux.reducer);
 }
 
 var quarkDirectoryPath = path.resolve("./quarks/supercollider-redux/");
