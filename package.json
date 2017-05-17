@@ -1,6 +1,6 @@
 {
   "name": "supercollider-redux",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "State synchronization between a replica SuperCollider state store and a primary Redux state store.",
   "main": "lib/index.js",
   "scripts": {
