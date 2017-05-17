@@ -34,10 +34,26 @@ class SCStoreController {
       switch (command) {
         case '/dispatch':
           let actionPairs = msg.slice(1);
-          let i;
+          let i = 0;
           let action = {};
-          for (i = 0; i < actionPairs.length - 1; i+=2) {
-            action[actionPairs[i]] = actionPairs[i + 1];
+          let parsingPayload = false;
+          while (i < actionPairs.length - 1) {
+            // if 'payload' is sent, we'll take all the following pairs
+            // as key / values of the payload
+            if (actionPairs[i] == 'payload') {
+              parsingPayload = true;
+              action.payload = {};
+              i += 1;
+            } else {
+              if (parsingPayload == false) {
+                // by default, forward all pairs as key / value
+                action[actionPairs[i]] = actionPairs[i + 1];
+              } else {
+                // unless we're parsing the payload
+                action.payload[actionPairs[i]] = actionPairs[i + 1];
+              }
+              i += 2;
+            }
           }
           this.store.dispatch(action);
           break;

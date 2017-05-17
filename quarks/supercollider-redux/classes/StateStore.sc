@@ -47,8 +47,12 @@ StateStore {
 
   dispatch {
     arg action;
-    var actionPairs = action.getPairs();
-    primaryStoreSocket.listSendMsg(["/dispatch"] ++ actionPairs);
+    var actionPairs = action.getPairs(),
+      payloadPairs = [];
+    if (action.payload != nil, {
+      payloadPairs = action.payload.getPairs();
+    });
+    primaryStoreSocket.listSendMsg(["/dispatch"] ++ actionPairs ++ payloadPairs);
   }
 
   subscribe {

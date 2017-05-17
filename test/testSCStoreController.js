@@ -19,14 +19,33 @@ import sc from "supercolliderjs"
 import SCStoreController from "./SCStoreController"
 const expect = chai.expect;
 
+function rootReducer (state, action) {
+  state = supercolliderRedux.reducer(state, action);
+
+  state.SCStoreControllerTest = false;
+  state.SCStoreControllerPayloadTest = false;
+  switch (action.type) {
+    case 'SCSTORECONTROLLER_TEST':
+      state.SCStoreControllerTest = true;
+      break;
+
+    case 'SCSTORECONTROLLER_PAYLOAD_TEST':
+      state.SCStoreControllerPayloadTest = action.payload.hello;
+      break;
+    
+    default:
+      break;
+  }
+
+  return state;
+}
+
 function configure_store () {
-  return createStore(supercolliderRedux.reducer);
+  return createStore(rootReducer);
 }
 
 var quarkDirectoryPath = path.resolve("./quarks/supercollider-redux/");
 var sclang;
-
-
 
 describe("SCStoreController", function() {
   var store = configure_store();
@@ -81,6 +100,30 @@ describe("SCStoreController", function() {
       expect(state.scStateStoreReadyState).to.equal("READY");
       done();
     }, expectedInitTime);
+  });
+
+  it("should handle actions sent without a payload", function (done) {
+    let unsub = store.subscribe(() => {
+      let state = store.getState();
+      expect(state.SCStoreControllerTest).to.equal(true);
+      unsub();
+      done();
+    });
+    sclang
+      .interpret('StateStore.getInstance().dispatch((type: "SCSTORECONTROLLER_TEST"))')
+      .catch(done);
+  });
+
+  it("should handle actions sent with a payload", function (done) {
+    let unsub = store.subscribe(() => {
+      let state = store.getState();
+      expect(state.SCStoreControllerPayloadTest).to.equal("world");
+      unsub();
+      done();
+    });
+    sclang
+      .interpret('StateStore.getInstance().dispatch((type: "SCSTORECONTROLLER_PAYLOAD_TEST", payload: (hello: "world")))')
+      .catch(done);
   });
 
 });
