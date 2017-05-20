@@ -25,14 +25,17 @@ ReduxEventStreamPlayer : EventStreamPlayer {
     arg inTime;
     var nextBeatAbs, nextTime;
     nextTime = routine.next(inTime);
-    nextBeatAbs = this.nextBeat + this.clock.beats;
-    store.dispatch((
-      type: "SUPERCOLLIDER-REDUX_SUPERCOLLIDER_EVENTSTREAMPLAYER_NEXTBEAT",
-      payload: (
-        id: id,
-        nextBeat: nextBeatAbs
-      )
-    ))
+    if (nextTime != nil, {
+      // if player hasn't stopped
+      nextBeatAbs = this.nextBeat + this.clock.beats;
+      store.dispatch((
+        type: "SUPERCOLLIDER-REDUX_SUPERCOLLIDER_EVENTSTREAMPLAYER_NEXTBEAT",
+        payload: (
+          id: id,
+          nextBeat: nextBeatAbs
+        )
+      ));
+    });
     ^nextTime;
   }
 }
