@@ -20,7 +20,7 @@ StateStore {
   classvar <>instance;
   var state,
     subscribers,
-    primaryStoreSocket;
+    dispatchSockets;
 
   *new {
     arg initialState;
@@ -36,13 +36,43 @@ StateStore {
   init {
     arg initialState;
 
+    dispatchSockets = [
+      Server.new(\primaryStore, NetAddr.new("127.0.0.1", 3334))
+    ];
+
     state = initialState;
 
     subscribers = List.new();
 
-    primaryStoreSocket = Server.new(\primaryStore, NetAddr.new("127.0.0.1", 3334))
-
     ^this;
+  }
+  /**
+   *  Supporting multiple dispatch locations.  To set, pass a dict with 
+   *  each item including `addr` and `port`:
+   *  
+   *    var store = StateStore.getInstance();
+   *
+   *    store.setDispatchLocations((
+   *      \one: (
+   *        addr: "127.0.0.1",
+   *        port: 3334
+   *
+   *      ),
+   *      \two: (
+   *        addr: "127.0.0.1",
+   *        port: 3335
+   *      )
+   *    ));
+   **/
+  setDispatchLocations {
+    arg locationsDict;
+    
+    dispatchSockets = [];
+
+    locationsDict.keysValuesDo({
+      arg name, location;
+      dispatchSockets.add(Server.new(name, NetAddr.new(location.addr, location.port)));
+    });
   }
 
   dispatch {
@@ -52,7 +82,11 @@ StateStore {
     if (action.payload != nil, {
       payloadPairs = action.payload.getPairs();
     });
-    primaryStoreSocket.listSendMsg(["/dispatch"] ++ actionPairs ++ payloadPairs);
+    dispatchSockets.do({
+      arg dispatchSocket;
+
+      dispatchSocket.listSendMsg(["/dispatch"] ++ actionPairs ++ payloadPairs);
+    });
   }
 
   subscribe {
