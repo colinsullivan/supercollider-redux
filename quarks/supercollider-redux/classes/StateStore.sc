@@ -20,7 +20,7 @@ StateStore {
   classvar <>instance;
   var state,
     subscribers,
-    dispatchSockets;
+    dispatchSocketsDict;
 
   *new {
     arg initialState;
@@ -36,9 +36,9 @@ StateStore {
   init {
     arg initialState;
 
-    dispatchSockets = [
-      Server.new(\primaryStore, NetAddr.new("127.0.0.1", 3334))
-    ];
+    dispatchSocketsDict = (
+      \primary: NetAddr.new("127.0.0.1", 3334)
+    );
 
     state = initialState;
 
@@ -66,12 +66,19 @@ StateStore {
    **/
   setDispatchLocations {
     arg locationsDict;
-    
-    dispatchSockets = [];
 
+    // disconnect all sockets
+    dispatchSocketsDict.keysValuesDo({
+      arg socketName, socket;
+      socket.disconnect();
+    });
+    
+    dispatchSocketsDict = ();
+
+    // create new sockets
     locationsDict.keysValuesDo({
       arg name, location;
-      dispatchSockets.add(Server.new(name, NetAddr.new(location.addr, location.port)));
+      dispatchSocketsDict[name] = NetAddr.new(location.addr, location.port);
     });
   }
 
@@ -82,10 +89,10 @@ StateStore {
     if (action.payload != nil, {
       payloadPairs = action.payload.getPairs();
     });
-    dispatchSockets.do({
-      arg dispatchSocket;
+    dispatchSocketsDict.keysValuesDo({
+      arg socketName, socket;
 
-      dispatchSocket.listSendMsg(["/dispatch"] ++ actionPairs ++ payloadPairs);
+      socket.sendRaw((["/dispatch"] ++ actionPairs ++ payloadPairs).asRawOSC());
     });
   }
 
