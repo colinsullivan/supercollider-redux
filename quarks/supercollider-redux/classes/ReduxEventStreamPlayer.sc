@@ -31,6 +31,13 @@ ReduxEventStreamPlayer : EventStreamPlayer {
 			streamHasEnded = stream.notNil;
 			cleanup.clear;
 			this.removedFromScheduler;
+      action = (
+        type: "SUPERCOLLIDER-REDUX_SUPERCOLLIDER_EVENTSTREAMPLAYER_ENDED",
+        payload: (
+          id: id
+        )
+      );
+      store.dispatch(action);
 			^nil
 		}{
 			nextTime = outEvent.playAndDelta(cleanup, muteCount > 0);
