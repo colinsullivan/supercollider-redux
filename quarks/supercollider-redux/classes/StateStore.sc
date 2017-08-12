@@ -85,14 +85,18 @@ StateStore {
   dispatch {
     arg action;
     var actionPairs = action.getPairs(),
-      payloadPairs = [];
+      payloadPairs = [],
+      msg;
     if (action.payload != nil, {
       payloadPairs = action.payload.getPairs();
+      actionPairs = ['type', action.type];
+      msg = (["/dispatch"] ++ actionPairs ++ ['payload'] ++ payloadPairs);
+    }, {
+      msg = (["/dispatch"] ++ actionPairs);
     });
     dispatchSocketsDict.keysValuesDo({
       arg socketName, socket;
-
-      socket.sendRaw((["/dispatch"] ++ actionPairs ++ payloadPairs).asRawOSC());
+      socket.sendRaw(msg.asRawOSC());
     });
   }
 
