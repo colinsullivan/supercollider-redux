@@ -55,9 +55,10 @@ ReduxEventStreamPlayer : EventStreamPlayer {
       outEvent.keysValuesDo({
         arg key, val;
 
-        if (['id', 'msgFunc', 'server'].includes(key) == false, {
+        if (['id', 'msgFunc', 'server', 'midiout', 'uid'].includes(key) == false, {
           action.payload[key] = val;
         });
+
       });
       store.dispatch(action);
 			^nextTime
