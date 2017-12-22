@@ -1,5 +1,5 @@
 /**
- *  @file       AbletonTempoClockController.sc
+ *  @file       ReduxAbletonTempoClockController.sc
  *
  *	@desc       Wraps a TempoClock instance and slaves it to the `abletonlink`
  *  clock info coming from a state store equipped with the `abletonlink-redux`
@@ -24,14 +24,16 @@ ReduxAbletonTempoClockController : Object {
   }
   init {
     arg params;
-    var me = this;
+
+    //"ReduxAbletonTempoClockController.init".postln();
     
     // reference to our StateStore
     store = params['store'];
     clockOffsetSeconds = params['clockOffsetSeconds'];
 
+    this.handleStateChange();
     store.subscribe({
-      me.handleStateChange();
+      this.handleStateChange();
     });
   }
 
