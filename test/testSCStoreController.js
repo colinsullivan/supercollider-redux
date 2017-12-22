@@ -16,7 +16,7 @@ import supercolliderRedux from "../"
 
 import sc from "supercolliderjs"
 
-import SCStoreController from "./SCStoreController"
+const SCStoreController = supercolliderRedux.SCStoreController
 const expect = chai.expect;
 
 function rootReducer (state, action) {
