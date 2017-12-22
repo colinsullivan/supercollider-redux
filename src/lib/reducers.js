@@ -10,6 +10,8 @@
 
 import * as actionTypes from "./actionTypes";
 
+export const DEFAULT_MOUNT_POINT = 'supercolliderRedux';
+
 export function create_default_state () {
   return {
     scStateStoreReadyState: null

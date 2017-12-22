@@ -11,7 +11,7 @@
 
 import path from "path"
 import chai from "chai"
-import { createStore } from "redux"
+import { createStore, combineReducers } from "redux"
 import supercolliderRedux from "../"
 
 import sc from "supercolliderjs"
@@ -19,26 +19,27 @@ import sc from "supercolliderjs"
 const SCStoreController = supercolliderRedux.SCStoreController
 const expect = chai.expect;
 
-function rootReducer (state, action) {
-  state = supercolliderRedux.reducer(state, action);
+var rootReducer = combineReducers({
+  [supercolliderRedux.DEFAULT_MOUNT_POINT]: supercolliderRedux.reducer,
+  test: function (state = {}, action) {
+    state.SCStoreControllerTest = false;
+    state.SCStoreControllerPayloadTest = false;
+    switch (action.type) {
+      case 'SCSTORECONTROLLER_TEST':
+        state.SCStoreControllerTest = true;
+        break;
 
-  state.SCStoreControllerTest = false;
-  state.SCStoreControllerPayloadTest = false;
-  switch (action.type) {
-    case 'SCSTORECONTROLLER_TEST':
-      state.SCStoreControllerTest = true;
-      break;
+      case 'SCSTORECONTROLLER_PAYLOAD_TEST':
+        state.SCStoreControllerPayloadTest = action.payload.hello;
+        break;
+      
+      default:
+        break;
+    }
 
-    case 'SCSTORECONTROLLER_PAYLOAD_TEST':
-      state.SCStoreControllerPayloadTest = action.payload.hello;
-      break;
-    
-    default:
-      break;
+    return state;
   }
-
-  return state;
-}
+});
 
 function configure_store () {
   return createStore(rootReducer);
@@ -88,7 +89,9 @@ describe("SCStoreController", function() {
     
     let state = store.getState();
 
-    expect(state.scStateStoreReadyState).to.equal("INIT");
+    expect(
+      state[supercolliderRedux.DEFAULT_MOUNT_POINT].scStateStoreReadyState
+    ).to.equal("INIT");
     done();
   });
 
@@ -97,7 +100,9 @@ describe("SCStoreController", function() {
     setTimeout(() => {
       let state = store.getState();
 
-      expect(state.scStateStoreReadyState).to.equal("READY");
+      expect(
+        state[supercolliderRedux.DEFAULT_MOUNT_POINT].scStateStoreReadyState
+      ).to.equal("READY");
       done();
     }, expectedInitTime);
   });
@@ -105,7 +110,7 @@ describe("SCStoreController", function() {
   it("should handle actions sent without a payload", function (done) {
     let unsub = store.subscribe(() => {
       let state = store.getState();
-      expect(state.SCStoreControllerTest).to.equal(true);
+      expect(state.test.SCStoreControllerTest).to.equal(true);
       unsub();
       done();
     });
@@ -117,7 +122,7 @@ describe("SCStoreController", function() {
   it("should handle actions sent with a payload", function (done) {
     let unsub = store.subscribe(() => {
       let state = store.getState();
-      expect(state.SCStoreControllerPayloadTest).to.equal("world");
+      expect(state.test.SCStoreControllerPayloadTest).to.equal("world");
       unsub();
       done();
     });

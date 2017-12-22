@@ -24,7 +24,7 @@ class SCStoreController {
     this._apiCallIndex = 0;
     
     this.actionListenerSocket = new osc.Server(3334, "127.0.0.1");
-    this.actionListenerSocket.on("message", (msg, rinfo) => {
+    this.actionListenerSocket.on("message", (msg) => {
       //console.log("msg");
       //console.log(msg);
       //console.log("rinfo");
@@ -70,6 +70,7 @@ class SCStoreController {
     var api = new sc.scapi();
 
     this.scapi = api;
+    api.log.debug = true;
     api.log.echo = true;
 
     api.on("error", function (err) {
@@ -82,6 +83,7 @@ class SCStoreController {
     //console.log("connect.");
 
     // send init message to the sc process
+    //console.log("StateStore.init");
     this.call("StateStore.init", [this.store.getState()]);
 
     //.then((resp) => {
