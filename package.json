@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "browser": "lib/index_browser.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-register",
+    "test": "mocha --timeout 10000 --slow 4000 --compilers js:babel-register",
     "build": "rm -Rf lib && babel src --out-dir lib"
   },
   "repository": {

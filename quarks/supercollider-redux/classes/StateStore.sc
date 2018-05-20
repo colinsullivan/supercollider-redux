@@ -16,6 +16,7 @@
  *  dispatches actions back up to the primary state store and publishes
  *  state updates to all local subscriber functions.
  **/
+
 StateStore {
   classvar <>instance;
   var state,
@@ -87,7 +88,9 @@ StateStore {
     var actionPairs = action.getPairs(),
       payloadPairs = [],
       msg;
+
     if (action.payload != nil, {
+      //"[supercollider-redux]: Preparing payload...".postln();
       payloadPairs = action.payload.getPairs();
       actionPairs = ['type', action.type];
       msg = (["/dispatch"] ++ actionPairs ++ ['payload'] ++ payloadPairs);
@@ -96,6 +99,8 @@ StateStore {
     });
     dispatchSocketsDict.keysValuesDo({
       arg socketName, socket;
+      //"[supercollider-redux]: Dispatching message: ".postln();
+      //("[supercollider-redux]: " ++ msg).postln();
       socket.sendRaw(msg.asRawOSC());
     });
   }

@@ -52,10 +52,18 @@ ReduxEventStreamPlayer : EventStreamPlayer {
           nextBeat: nextBeatAbs
         )
       );
+      // filter out keys that don't serialize over supercolliderjs
       outEvent.keysValuesDo({
         arg key, val;
 
-        if (['id', 'msgFunc', 'server', 'midiout', 'uid'].includes(key) == false, {
+        if ([
+          'id',
+          'msgFunc',
+          'server',
+          'midiout',
+          'uid',
+          'patch'
+        ].includes(key) == false, {
           action.payload[key] = val;
         });
 
