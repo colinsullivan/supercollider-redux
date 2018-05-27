@@ -3,7 +3,7 @@
   path:    "supercollider-redux",
   summary:    "State synchronization between a replica SuperCollider state store and a primary Redux state store.",
   author:    "Colin Sullivan",
-  version:    0.8,
+  version:    0.9,
 //  helpdoc:    "",
   url:      "https://github.com/colinsullivan/supercollider-redux#readme",
   dependencies:  #["API@tags/2.0.2"]
