@@ -85,17 +85,21 @@ StateStore {
 
   dispatch {
     arg action;
-    var actionPairs = action.getPairs(),
-      payloadPairs = [],
-      msg;
+    var msg,
+      payloadString;
 
     if (action.payload != nil, {
       //"[supercollider-redux]: Preparing payload...".postln();
-      payloadPairs = action.payload.getPairs();
-      actionPairs = ['type', action.type];
-      msg = (["/dispatch"] ++ actionPairs ++ ['payload'] ++ payloadPairs);
+      payloadString = SuperColliderJS.stringify(action.payload);
+      //"payloadString:".postln;
+      //payloadString.postln;
+      msg = ([
+        "/dispatch",
+        'type', action.type,
+        'payloadString', payloadString
+      ]);
     }, {
-      msg = (["/dispatch"] ++ actionPairs);
+      msg = (["/dispatch", 'type', action.type]);
     });
     dispatchSocketsDict.keysValuesDo({
       arg socketName, socket;

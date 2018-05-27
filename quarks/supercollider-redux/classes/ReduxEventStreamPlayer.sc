@@ -49,25 +49,10 @@ ReduxEventStreamPlayer : EventStreamPlayer {
         type: "SUPERCOLLIDER-REDUX_SUPERCOLLIDER_EVENTSTREAMPLAYER_NEXTBEAT",
         payload: (
           id: id,
-          nextBeat: nextBeatAbs
+          nextBeat: nextBeatAbs,
+          outEvent: outEvent.copy()
         )
       );
-      // filter out keys that don't serialize over supercolliderjs
-      outEvent.keysValuesDo({
-        arg key, val;
-
-        if ([
-          'id',
-          'msgFunc',
-          'server',
-          'midiout',
-          'uid',
-          'patch'
-        ].includes(key) == false, {
-          action.payload[key] = val;
-        });
-
-      });
       store.dispatch(action);
 			^nextTime
 		};
