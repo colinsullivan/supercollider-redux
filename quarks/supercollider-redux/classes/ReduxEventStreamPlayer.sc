@@ -49,6 +49,7 @@ ReduxEventStreamPlayer : EventStreamPlayer {
         type: "SUPERCOLLIDER-REDUX_SUPERCOLLIDER_EVENTSTREAMPLAYER_NEXTBEAT",
         payload: (
           id: id,
+          nextTime: nextTime,
           nextBeat: nextBeatAbs,
           outEvent: outEvent.copy()
         )
