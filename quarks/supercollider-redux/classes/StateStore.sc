@@ -105,7 +105,7 @@ StateStore {
       arg socketName, socket;
       //"[supercollider-redux]: Dispatching message: ".postln();
       //("[supercollider-redux]: " ++ msg).postln();
-      socket.sendRaw(msg.asRawOSC());
+      {socket.sendRaw(msg.asRawOSC())}.defer();
     });
   }
 

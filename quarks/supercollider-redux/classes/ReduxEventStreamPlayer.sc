@@ -50,10 +50,16 @@ ReduxEventStreamPlayer : EventStreamPlayer {
         payload: (
           id: id,
           nextTime: nextTime,
-          nextBeat: nextBeatAbs,
-          outEvent: outEvent.copy()
+          nextBeat: nextBeatAbs
         )
       );
+      ['midinote', 'note'].do({
+        arg key;
+
+        if (outEvent.includesKey(key) && outEvent[key].isFunction() == false, {
+          action.payload[key] = outEvent[key];
+        });
+      });
       store.dispatch(action);
 			^nextTime
 		};
