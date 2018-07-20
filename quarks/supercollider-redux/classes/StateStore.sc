@@ -24,24 +24,21 @@ StateStore {
     dispatchSocketsDict;
 
   *new {
-    arg initialState;
-    ^super.new.init(initialState);
+    ^super.new.init();
   }
   *getInstance {
     if (this.instance == nil, {
-      this.instance = StateStore.new(());
+      this.instance = StateStore.new();
     });
 
     ^this.instance;
   }
   init {
-    arg initialState;
-
     dispatchSocketsDict = (
-      \primary: NetAddr.new("127.0.0.1", 3334)
+      \primary: NetAddr.new("127.0.0.1", 3335)
     );
 
-    state = initialState;
+    state = nil;
 
     subscribers = List.new();
 

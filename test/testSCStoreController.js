@@ -50,27 +50,22 @@ var sclang;
 
 describe("SCStoreController", function() {
   var store = configure_store();
-
-  var scStoreController;
   
   if (!process.env.EXTERNAL_SCLANG) {
     it("should start", function (done) {
       sc.resolveOptions(null, {
         debug: true
       }).then((options) => {
-        options.includePaths = [
-            quarkDirectoryPath
-        ];
         options.debug = true;
         options.echo = true;
-        sclang = new sc.lang.SCLang(options);
-
-        sclang.boot().then(() => {
-          sclang.interpret('API.mountDuplexOSC();').then(() => {
+        sc.lang.boot(options).then((lang) => {
+          sclang = lang;
+          lang.interpret('API.mountDuplexOSC();').then(() => {
             done();
           }).catch(done);
         }).catch((err) => {
-          console.log(err.data.stdout);
+          console.log("err");
+          console.log(err);
           done(new Error("sclang failed to boot"));
         });
       });
@@ -84,15 +79,14 @@ describe("SCStoreController", function() {
     });
   }
 
-  it("should have started SC init", function (done) {
-    scStoreController = new SCStoreController(store);
+  it("should have started SC init", function () {
+    var scStoreController = new SCStoreController(store);
     
     let state = store.getState();
 
     expect(
       state[supercolliderRedux.DEFAULT_MOUNT_POINT].scStateStoreReadyState
     ).to.equal("INIT");
-    done();
   });
 
   var expectedInitTime = 150;

@@ -14,7 +14,7 @@ export const DEFAULT_MOUNT_POINT = 'supercolliderRedux';
 
 export function create_default_state () {
   return {
-    scStateStoreReadyState: null
+    scStateStoreReadyState: "NOT_STARTED"
   };
 }
 export default function (state = create_default_state(), action) {

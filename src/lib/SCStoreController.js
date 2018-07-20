@@ -9,7 +9,6 @@
  **/
 
 import sc from "supercolliderjs"
-import osc from "node-osc"
 import supercolliderRedux from "../"
 
 /**
@@ -22,35 +21,10 @@ class SCStoreController {
   constructor(store) {
     this.store = store;
     this._apiCallIndex = 0;
-    
-    this.actionListenerSocket = new osc.Server(3334, "127.0.0.1");
-    this.actionListenerSocket.on("message", (msg) => {
-      //console.log("msg");
-      //console.log(msg);
-      //console.log("rinfo");
-      //console.log(rinfo);
 
-      var command = msg[0];
-      var actionPairs = msg.slice(1);
-      var i = 0;
-      var action = {};
-      switch (command) {
-        case '/dispatch':
-          while (i < actionPairs.length - 1) {
-            if (actionPairs[i] === 'type') {
-              action.type = actionPairs[i + 1];
-              i++;
-            } else if (actionPairs[i] === 'payloadString') {
-              action.payload = JSON.parse(actionPairs[i + 1]);
-              break;
-            }
-          }
-          this.store.dispatch(action);
-          break;
-        
-        default:
-          break;
-      }
+    this.actionListener = new supercolliderRedux.OSCActionListener({
+      localPort: 3335,
+      store
     });
 
     // we're starting our journey!
@@ -73,7 +47,6 @@ class SCStoreController {
     //console.log("connect.");
 
     // send init message to the sc process
-    //console.log("StateStore.init");
     this.call("StateStore.init", [this.store.getState()]);
 
     //.then((resp) => {
