@@ -27,6 +27,7 @@ ReduxEventStreamPlayer : EventStreamPlayer {
     var eventPairs;
     var action;
 		var outEvent = stream.next(event.copy);
+    var shouldIgnore;
 		if (outEvent.isNil) {
 			streamHasEnded = stream.notNil;
 			cleanup.clear;
@@ -53,11 +54,16 @@ ReduxEventStreamPlayer : EventStreamPlayer {
           nextBeat: nextBeatAbs
         )
       );
-      ['midinote', 'note'].do({
-        arg key;
+      shouldIgnore = ({
+        arg key, value;
 
-        if (outEvent.includesKey(key) && outEvent[key].isFunction() == false, {
-          action.payload[key] = outEvent[key];
+        ['server', 'id'].includes(key).or(value.isFunction());
+      });
+      outEvent.keysValuesDo({
+        arg key, value;
+
+        if (shouldIgnore.value(key, value) == false, {
+          action.payload[key] = value;
         });
       });
       store.dispatch(action);
