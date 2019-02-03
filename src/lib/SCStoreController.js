@@ -24,7 +24,8 @@ class SCStoreController {
 
     this.actionListener = new supercolliderRedux.OSCActionListener({
       localPort: 3335,
-      store
+      store,
+      clientId: 'supercollider'
     });
 
     // we're starting our journey!
@@ -42,35 +43,15 @@ class SCStoreController {
       console.log(err);
     });
 
-    //console.log("sc api connecting...");
     api.connect();
-    //console.log("connect.");
 
     // send init message to the sc process
     this.call("StateStore.init", [this.store.getState()]);
-
-    //.then((resp) => {
-      //if (resp.result.status === "ok") {
-        ////console.log("sc api connected.");
-        //this.store.dispatch(actions.supercolliderReady());
-      //} else {
-        //console.error("ERROR: [SCController] Unable to connect to SuperCollider process.");
-      //}
-    //});
     this.store.subscribe(() => { this.handleStoreChanged(); });
     
   }
   handleStoreChanged() {
-    var state = this.store.getState();
-    //console.log("handleStoreChanged");
-    // send all state changes to sclang process
-    //if (state.scStateStoreReadyState == "READY") {
-    //console.log("calling StateStore.setState with");
-    //console.log("state");
-    //console.log(JSON.stringify(state, " ", 4));
-    this.call("StateStore.setState", [state]);
-    //}
-
+    this.call("StateStore.setState", [this.store.getState()]);
   }
   getAPICallIndex () {
     if (this._apiCallIndex < Number.MAX_SAFE_INTEGER - 1) {

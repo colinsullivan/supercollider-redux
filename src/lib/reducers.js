@@ -8,23 +8,24 @@
  *  @license    Licensed under the MIT license.
  **/
 
-import * as actionTypes from "./actionTypes";
+import * as actionTypes from './actionTypes';
+import { STORE_READY_STATES } from './constants';
 
 export const DEFAULT_MOUNT_POINT = 'supercolliderRedux';
 
 export function create_default_state () {
   return {
-    scStateStoreReadyState: "NOT_STARTED"
+    scStateStoreReadyState: STORE_READY_STATES.NOT_STARTED
   };
 }
 export default function (state = create_default_state(), action) {
   switch (action.type) {
     case actionTypes.SUPERCOLLIDER_INIT_START:
-      state.scStateStoreReadyState = "INIT";
+      state.scStateStoreReadyState = STORE_READY_STATES.INIT;
       break;
 
     case actionTypes.SUPERCOLLIDER_READY:
-      state.scStateStoreReadyState = "READY";
+      state.scStateStoreReadyState = STORE_READY_STATES.READY;
       break;
 
     default:

@@ -27,10 +27,11 @@ class OSCActionListener {
   constructor (params) {
     this.params = params;
     this.store = params.store;
+    this.clientId = params.clientId || null;
     this.init();
   }
   init () {
-    console.log(`binding to 0.0.0.0:${this.params.localPort}`);
+    //console.log(`binding to 0.0.0.0:${this.params.localPort}`);
     this.oscPort = new osc.UDPPort({
       localAddress: '0.0.0.0',
       localPort: this.params.localPort
@@ -48,6 +49,9 @@ class OSCActionListener {
       let i;
       let action = {
       };
+      if (this.clientId) {
+        action.clientId = this.clientId;
+      }
       for (i = 0; i < actionPairs.length - 1; i+=2) {
         if (actionPairs[i] == 'payloadString') {
           action.payload = JSON.parse(actionPairs[i + 1]);
