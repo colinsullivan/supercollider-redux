@@ -56,7 +56,7 @@ ReduxTempoClockController : Object {
     });
 
     if (lastState.tempo !== tempoBPM, {
-      "ReduxTempoClockController: Changing tempo abruptly...".postln();
+      //"ReduxTempoClockController: Changing tempo abruptly...".postln();
       clock.tempo = tempoBPM / 60.0;
       lastState.tempoBPM = tempoBPM;
     });
