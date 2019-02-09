@@ -1,11 +1,11 @@
 {
   "name": "supercollider-redux",
-  "version": "0.0.95",
+  "version": "0.0.96",
   "description": "State synchronization between a replica SuperCollider state store and a primary Redux state store.",
   "main": "lib/index.js",
   "browser": "lib/index_browser.js",
   "scripts": {
-    "test": "mocha --timeout 10000 --slow 4000 --compilers js:babel-register",
+    "test": "mocha --timeout 10000 --slow 4000 --require @babel/register",
     "build": "rm -Rf lib && babel src --out-dir lib"
   },
   "repository": {
@@ -25,30 +25,27 @@
   },
   "homepage": "https://github.com/colinsullivan/supercollider-redux#readme",
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "osc": "^2.2.3",
     "redux": "^3.6.0",
     "supercolliderjs": "^0.14.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
+    "babel-eslint": "^10.0.1",
     "chai": "^3.5.0",
     "mocha": "^3.3.0"
   },
   "babel": {
     "presets": [
-      "env"
+      "@babel/preset-env"
     ]
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
-        "impliedStrict": true
-      }
-    },
+    "parser": "babel-eslint",
     "env": {
       "browser": false,
       "node": true,
