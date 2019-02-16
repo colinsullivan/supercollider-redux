@@ -7,5 +7,10 @@ echo "sclang_conf: $TRAVIS_BUILD_DIR/sclang_conf.yaml" >> .supercollider.yaml
 echo ".supercollider.yaml:"
 cat .supercollider.yaml
 
+echo "Quarks.install(\"$TRAVIS_BUILD_DIR/quarks/supercollider-redux\");" >> install_quark.sc
+
+echo "install_quark.sc"
+cat install_quark.sc
+
 #echo "sclang_conf.yaml:"
 #cat sclang_conf.yaml
