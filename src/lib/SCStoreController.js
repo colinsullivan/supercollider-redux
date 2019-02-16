@@ -46,8 +46,8 @@ class SCStoreController {
     api.connect();
 
     // send init message to the sc process
-    this.call("StateStore.init", [this.store.getState()]);
     this.store.subscribe(() => { this.handleStoreChanged(); });
+    this.call("StateStore.init", [this.store.getState()]);
     
   }
   handleStoreChanged() {
@@ -63,6 +63,10 @@ class SCStoreController {
   }
   call (apiMethodName, args) {
     return this.scapi.call(this.getAPICallIndex(), apiMethodName, args);
+  }
+  disconnect() {
+    this.scapi.disconnect();
+    this.actionListener.quit();
   }
 }
 

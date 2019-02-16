@@ -45,8 +45,9 @@ function configure_store () {
   return createStore(rootReducer);
 }
 
-var quarkDirectoryPath = path.resolve("./quarks/supercollider-redux/");
-var sclang;
+var quarkDirectoryPath = path.resolve("./quarks/supercollider-redux/"),
+  sclang,
+  scStoreController;
 
 describe("SCStoreController", function() {
   var store = configure_store();
@@ -80,7 +81,7 @@ describe("SCStoreController", function() {
   }
 
   it("should have started SC init", function () {
-    var scStoreController = new SCStoreController(store);
+    scStoreController = new SCStoreController(store);
     
     let state = store.getState();
 
@@ -89,7 +90,7 @@ describe("SCStoreController", function() {
     ).to.equal("INIT");
   });
 
-  var expectedInitTime = 150;
+  var expectedInitTime = 450;
   it(`supercollider should respond in < ${expectedInitTime} ms`, function (done) {
     setTimeout(() => {
       let state = store.getState();
@@ -123,6 +124,11 @@ describe("SCStoreController", function() {
     sclang
       .interpret('StateStore.getInstance().dispatch((type: "SCSTORECONTROLLER_PAYLOAD_TEST", payload: (hello: "world")))')
       .catch(done);
+  });
+
+  it('should quit supercollider', function (done) {
+    scStoreController.disconnect();
+    sclang.quit().then(() => done());
   });
 
 });

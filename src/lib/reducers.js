@@ -9,9 +9,8 @@
  **/
 
 import * as actionTypes from './actionTypes';
-import { STORE_READY_STATES } from './constants';
+import { STORE_READY_STATES, DEFAULT_MOUNT_POINT } from './constants';
 
-export const DEFAULT_MOUNT_POINT = 'supercolliderRedux';
 
 export function create_default_state () {
   return {
