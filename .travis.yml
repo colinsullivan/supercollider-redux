@@ -3,5 +3,5 @@ language: node_js
 node_js:
   - node
 before_install:
-  - $TRAVIS_BUILD_DIR/travis/install_supercollider.sh
-  - $TRAVIS_BUILD_DIR/travis/install_config.sh
+  - $TRAVIS_BUILD_DIR/.travis/install_supercollider.sh
+  - $TRAVIS_BUILD_DIR/.travis/install_config.sh
