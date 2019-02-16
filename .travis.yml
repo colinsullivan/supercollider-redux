@@ -9,5 +9,5 @@ before_install:
   - sclang $TRAVIS_BUILD_DIR/install_quark.sc
 cache:
   directories:
-    - $TRAVIS_BUILD_DIR/supercollider-build
-    - $TRAVIS_BUILD_DIR/sc3-plugins-build
+    - supercollider-build
+    - sc3-plugins-build
