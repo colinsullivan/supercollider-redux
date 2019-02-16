@@ -3,7 +3,5 @@ language: node_js
 node_js:
   - node
 before_install:
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FABAEF95
-  - sudo add-apt-repository -y ppa:supercollider/ppa
-  - sudo apt-get update
-  - sudo apt-get install -y supercollider
+  - $TRAVIS_BUILD_DIR/travis/install_supercollider.sh
+  - $TRAVIS_BUILD_DIR/travis/install_config.sh
