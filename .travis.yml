@@ -1,0 +1,6 @@
+language: node_js
+before_install:
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FABAEF95
+  - sudo add-apt-repository ppa:supercollider/ppa
+  - sudo apt-get update
+  - sudo apt-get install -y supercollider-ide
