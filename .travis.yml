@@ -1,4 +1,7 @@
+dist: xenial
 language: node_js
+node_js:
+  - node
 before_install:
   - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FABAEF95
   - sudo add-apt-repository -y ppa:supercollider/ppa
