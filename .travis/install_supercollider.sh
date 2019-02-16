@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # Clone supercollider and sc3-plugins if not in cache
-if [[ ! -d $HOME/supercollider ]]; then
+if [[ ! -f $HOME/supercollider/CMakeLists.txt ]]; then
   git clone --recursive https://github.com/supercollider/supercollider.git $HOME/supercollider
   cd $HOME/supercollider
   git checkout Version-3.10.2
 fi
-if [[ ! -d $HOME/sc3-plugins ]]; then
+if [[ ! -f $HOME/sc3-plugins/CMakeLists.txt ]]; then
   git clone --recursive https://github.com/supercollider/sc3-plugins.git $HOME/sc3-plugins
   cd $HOME/sc3-plugins
   git checkout Version-3.10.0
