@@ -8,5 +8,5 @@ before_install:
   - $TRAVIS_BUILD_DIR/.travis/install_config.sh
 cache:
   directories:
-    - $HOME/supercollider-build
-    - $HOME/sc3-plugins-build
+    - $HOME/supercollider
+    - $HOME/sc3-plugins
