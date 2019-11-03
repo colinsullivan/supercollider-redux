@@ -1,0 +1,44 @@
+skinparam backgroundColor #1d1f21
+skinparam defaultFontName Monaco
+skinparam defaultFontColor #c5c8c6
+skinparam defaultFontSize 16
+hide circle
+skinparam class {
+  backgroundColor #1d1f21
+  fontColor #b294bb
+  borderColor #b294bb
+  arrowColor #c5c8c6
+}
+skinparam object {
+  backgroundColor #1d1f21
+  fontColor #f0c674
+  borderColor #f0c674
+  arrowColor #c5c8c6
+}
+skinparam state {
+  backgroundColor #1d1f21
+  borderColor #c5c8c6
+  arrowColor #c5c8c6
+}
+skinparam sequenceParticipant {
+  backgroundColor #1d1f21
+  borderColor #c5c8c6
+}
+skinparam sequenceLifeLine {
+  borderColor #c5c8c6
+}
+skinparam sequence {
+  arrowColor #c5c8c6
+}
+skinparam component {
+  backgroundColor #1d1f21
+  borderColor #c5c8c6
+}
+skinparam interface {
+  backgroundColor #1d1f21
+  borderColor #c5c8c6
+}
+skinparam activity {
+  backgroundColor #1d1f21
+  borderColor #c5c8c6
+}

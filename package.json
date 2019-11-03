@@ -6,7 +6,8 @@
   "browser": "lib/index_browser.js",
   "scripts": {
     "test": "mocha --timeout 10000 --slow 4000 --require @babel/register",
-    "build": "rm -Rf lib && babel src --out-dir lib"
+    "build": "rm -Rf lib && babel src --out-dir lib",
+    "build_docs": "plantuml -tpng docs/*.puml"
   },
   "repository": {
     "type": "git",

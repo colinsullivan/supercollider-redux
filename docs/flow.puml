@@ -1,0 +1,10 @@
+@startuml
+!include styles.iuml
+
+(*) --> "Node.js Store" as nodejs_store
+nodejs_store -->[init] "sclang StateStore" as sclang_store
+sclang_store -->[dispatch] nodejs_store
+nodejs_store -->[setState] sclang_store
+
+@enduml
+
