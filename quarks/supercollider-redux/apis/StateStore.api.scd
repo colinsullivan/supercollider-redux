@@ -17,7 +17,7 @@
     //"StateStore.api.init".postln();
     store.setState(initialState);
     store.dispatch((
-      type: "SUPERCOLLIDER-REDUX_SUPERCOLLIDER_READY"
+      type: SCRedux.actionTypes['SUPERCOLLIDER_READY']
     ));
     reply.value();
   },
