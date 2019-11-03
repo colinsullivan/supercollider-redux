@@ -7,11 +7,12 @@
  *  @copyright  2018 Colin Sullivan
  *  @license    Licensed under the MIT license.
  **/
-import osc from 'osc'
+import osc from "osc";
 
-function parse_payload_pairs (payloadPairs) {
-  var i, payload = {};
-  for (i = 0; i < payloadPairs.length; i+=2) {
+function parse_payload_pairs(payloadPairs) {
+  var i,
+    payload = {};
+  for (i = 0; i < payloadPairs.length; i += 2) {
     payload[payloadPairs[i]] = payloadPairs[i + 1];
   }
   return payload;
@@ -24,22 +25,22 @@ function parse_payload_pairs (payloadPairs) {
  *  to the state store.
  **/
 class OSCActionListener {
-  constructor (params) {
+  constructor(params) {
     this.params = params;
     this.store = params.store;
     this.clientId = params.clientId || null;
     this.init();
   }
-  init () {
+  init() {
     //console.log(`binding to 0.0.0.0:${this.params.localPort}`);
     this.oscPort = new osc.UDPPort({
-      localAddress: '0.0.0.0',
+      localAddress: "0.0.0.0",
       localPort: this.params.localPort
     });
-    this.oscPort.on("message", (msg) => {
+    this.oscPort.on("message", msg => {
       //console.log("msg");
       //console.log(msg);
-      
+
       // expecting actions to have a `type` and an optional `payload`, key
       // value pairs sent in as a single OSC array.  If the keyword `payload`
       // appears, it implies we start filling the payload with subsequent
@@ -47,18 +48,17 @@ class OSCActionListener {
 
       let actionPairs = msg.args;
       let i;
-      let action = {
-      };
+      let action = {};
       if (this.clientId) {
         action.clientId = this.clientId;
       }
-      for (i = 0; i < actionPairs.length - 1; i+=2) {
-        if (actionPairs[i] == 'payloadString') {
+      for (i = 0; i < actionPairs.length - 1; i += 2) {
+        if (actionPairs[i] == "payloadString") {
           action.payload = JSON.parse(actionPairs[i + 1]);
           break;
-        } else if (actionPairs[i] === 'type') {
+        } else if (actionPairs[i] === "type") {
           action.type = actionPairs[i + 1];
-        } else if (actionPairs[i] === 'payloadPairs') {
+        } else if (actionPairs[i] === "payloadPairs") {
           action.payload = parse_payload_pairs(actionPairs.slice(i + 1));
           break;
         } else {
@@ -69,11 +69,10 @@ class OSCActionListener {
       }
 
       this.store.dispatch(action);
-
     });
     this.oscPort.open();
   }
-  quit () {
+  quit() {
     this.oscPort.close();
   }
 }

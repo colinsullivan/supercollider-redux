@@ -12,15 +12,15 @@
 import path from "path"
 import chai from "chai"
 import { createStore, combineReducers } from "redux"
-import supercolliderRedux from "../"
+import SCRedux from "../"
 
 import sc from "supercolliderjs"
 
-const SCStoreController = supercolliderRedux.SCStoreController
+const SCStoreController = SCRedux.SCStoreController
 const expect = chai.expect;
 
 var rootReducer = combineReducers({
-  [supercolliderRedux.DEFAULT_MOUNT_POINT]: supercolliderRedux.reducer,
+  [SCRedux.DEFAULT_MOUNT_POINT]: SCRedux.reducer,
   test: function (state = {}, action) {
     state.SCStoreControllerTest = false;
     state.SCStoreControllerPayloadTest = false;
@@ -86,7 +86,7 @@ describe("SCStoreController", function() {
     let state = store.getState();
 
     expect(
-      state[supercolliderRedux.DEFAULT_MOUNT_POINT].scStateStoreReadyState
+      state[SCRedux.DEFAULT_MOUNT_POINT].scStateStoreReadyState
     ).to.equal("INIT");
   });
 
@@ -96,7 +96,7 @@ describe("SCStoreController", function() {
       let state = store.getState();
 
       expect(
-        state[supercolliderRedux.DEFAULT_MOUNT_POINT].scStateStoreReadyState
+        state[SCRedux.DEFAULT_MOUNT_POINT].scStateStoreReadyState
       ).to.equal("READY");
       done();
     }, expectedInitTime);

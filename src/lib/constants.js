@@ -3,4 +3,4 @@ export const STORE_READY_STATES = {
   INIT: "INIT",
   READY: "READY"
 };
-export const DEFAULT_MOUNT_POINT = 'supercolliderRedux';
+export const DEFAULT_MOUNT_POINT = "SCRedux";

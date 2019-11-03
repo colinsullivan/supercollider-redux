@@ -8,16 +8,15 @@
  *  @license    Licensed under the MIT license.
  **/
 
-import * as actionTypes from './actionTypes';
-import { STORE_READY_STATES, DEFAULT_MOUNT_POINT } from './constants';
+import * as actionTypes from "./actionTypes";
+import { STORE_READY_STATES, DEFAULT_MOUNT_POINT } from "./constants";
 
-
-export function create_default_state () {
+export function create_default_state() {
   return {
     scStateStoreReadyState: STORE_READY_STATES.NOT_STARTED
   };
 }
-export default function (state = create_default_state(), action) {
+export default function(state = create_default_state(), action) {
   switch (action.type) {
     case actionTypes.SUPERCOLLIDER_INIT_START:
       state.scStateStoreReadyState = STORE_READY_STATES.INIT;
