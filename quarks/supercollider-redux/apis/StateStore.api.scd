@@ -17,7 +17,7 @@
     //"StateStore.api.init".postln();
     store.setState(initialState);
     store.dispatch((
-      type: SCRedux.actionTypes['SUPERCOLLIDER_READY']
+      type: SCRedux.actionTypes['SC_STORE_READY']
     ));
   },
   setState: {

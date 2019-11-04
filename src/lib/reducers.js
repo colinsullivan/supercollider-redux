@@ -9,7 +9,7 @@
  **/
 
 import * as actionTypes from "./actionTypes";
-import { STORE_READY_STATES, DEFAULT_MOUNT_POINT } from "./constants";
+import { STORE_READY_STATES } from "./constants";
 
 export function create_default_state() {
   return {
@@ -18,11 +18,11 @@ export function create_default_state() {
 }
 export default function(state = create_default_state(), action) {
   switch (action.type) {
-    case actionTypes.SUPERCOLLIDER_INIT_START:
+    case actionTypes.SC_STORE_INIT:
       state.scStateStoreReadyState = STORE_READY_STATES.INIT;
       break;
 
-    case actionTypes.SUPERCOLLIDER_READY:
+    case actionTypes.SC_STORE_READY:
       state.scStateStoreReadyState = STORE_READY_STATES.READY;
       break;
 

@@ -34,7 +34,7 @@ class SCStoreController {
     });
 
     // Sets the SC store ready state
-    this.store.dispatch(SCRedux.actions.supercolliderInitStarted());
+    this.store.dispatch(SCRedux.actions.scStoreInit());
 
     // reads config file located at: ./.supercollider.yaml
     var api = new SCAPI();

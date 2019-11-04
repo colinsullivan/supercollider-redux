@@ -8,14 +8,14 @@
  **/
 
 import * as actionTypes from "./actionTypes";
-export function supercolliderReady() {
+export function scStoreReady() {
   return {
-    type: actionTypes.SUPERCOLLIDER_READY
+    type: actionTypes.SC_STORE_READY
   };
 }
 
-export function supercolliderInitStarted() {
+export function scStoreInit() {
   return {
-    type: actionTypes.SUPERCOLLIDER_INIT_START
+    type: actionTypes.SC_STORE_INIT
   };
 }
