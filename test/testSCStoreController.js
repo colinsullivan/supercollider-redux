@@ -85,7 +85,7 @@ describe("SCReduxStoreController", function() {
     let state = store.getState();
 
     expect(
-      state[SCRedux.DEFAULT_MOUNT_POINT].scStateStoreReadyState
+      state[SCRedux.DEFAULT_MOUNT_POINT].scStoreReadyState
     ).to.equal("INIT");
   });
 
@@ -95,7 +95,7 @@ describe("SCReduxStoreController", function() {
       let state = store.getState();
 
       expect(
-        state[SCRedux.DEFAULT_MOUNT_POINT].scStateStoreReadyState
+        state[SCRedux.DEFAULT_MOUNT_POINT].scStoreReadyState
       ).to.equal("READY");
       done();
     }, expectedInitTime);

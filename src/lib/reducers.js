@@ -13,17 +13,17 @@ import { STORE_READY_STATES } from "./constants";
 
 export function create_default_state() {
   return {
-    scStateStoreReadyState: STORE_READY_STATES.NOT_STARTED
+    scStoreReadyState: STORE_READY_STATES.NOT_STARTED
   };
 }
 export default function(state = create_default_state(), action) {
   switch (action.type) {
     case actionTypes.SC_STORE_INIT:
-      state.scStateStoreReadyState = STORE_READY_STATES.INIT;
+      state.scStoreReadyState = STORE_READY_STATES.INIT;
       break;
 
     case actionTypes.SC_STORE_READY:
-      state.scStateStoreReadyState = STORE_READY_STATES.READY;
+      state.scStoreReadyState = STORE_READY_STATES.READY;
       break;
 
     default:
