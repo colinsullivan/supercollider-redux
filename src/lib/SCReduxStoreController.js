@@ -1,5 +1,5 @@
 /**
- *  @file       SCStoreController.js
+ *  @file       SCReduxStoreController.js
  *
  *
  *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
@@ -12,14 +12,14 @@ import SCAPI from "@supercollider/scapi";
 import SCRedux from "../";
 
 /**
- *  @class        SCStoreController
+ *  @class        SCReduxStoreController
  *
  *  @classdesc    Forward state to replica store in SuperCollider.  Also
  *  forward actions incoming from SuperCollider to the Redux store.
  **/
-class SCStoreController {
+class SCReduxStoreController {
   /**
-   *  Creates an SCStoreController and sends `init` to SC.
+   *  Creates an SCReduxStoreController and sends `init` to SC.
    *
    *  @param  {redux.Store}  store - The state store.
    **/
@@ -56,7 +56,7 @@ class SCStoreController {
     });
   }
   handle_api_error(err) {
-    console.log("SCStoreController api ERROR!");
+    console.log("SCReduxStoreController api ERROR!");
     console.log("err");
     console.log(err);
   }
@@ -71,4 +71,4 @@ class SCStoreController {
   }
 }
 
-export default SCStoreController;
+export default SCReduxStoreController;

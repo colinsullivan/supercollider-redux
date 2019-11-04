@@ -17,21 +17,21 @@ import SCRedux from "../"
 //import sc from "supercolliderjs"
 import {resolveOptions, boot} from "@supercollider/lang";
 
-const SCStoreController = SCRedux.SCStoreController
+const SCReduxStoreController = SCRedux.SCReduxStoreController
 const expect = chai.expect;
 
 var rootReducer = combineReducers({
   [SCRedux.DEFAULT_MOUNT_POINT]: SCRedux.reducer,
   test: function (state = {}, action) {
-    state.SCStoreControllerTest = false;
-    state.SCStoreControllerPayloadTest = false;
+    state.SCReduxStoreControllerTest = false;
+    state.SCReduxStoreControllerPayloadTest = false;
     switch (action.type) {
       case 'SCSTORECONTROLLER_TEST':
-        state.SCStoreControllerTest = true;
+        state.SCReduxStoreControllerTest = true;
         break;
 
       case 'SCSTORECONTROLLER_PAYLOAD_TEST':
-        state.SCStoreControllerPayloadTest = action.payload.hello;
+        state.SCReduxStoreControllerPayloadTest = action.payload.hello;
         break;
       
       default:
@@ -50,7 +50,7 @@ var quarkDirectoryPath = path.resolve("./quarks/supercollider-redux/"),
   sclang,
   scStoreController;
 
-describe("SCStoreController", function() {
+describe("SCReduxStoreController", function() {
   var store = configure_store();
   
   if (!process.env.EXTERNAL_SCLANG) {
@@ -80,7 +80,7 @@ describe("SCStoreController", function() {
   }
 
   it("should have started SC init", function () {
-    scStoreController = new SCStoreController(store);
+    scStoreController = new SCReduxStoreController(store);
     
     let state = store.getState();
 
@@ -104,7 +104,7 @@ describe("SCStoreController", function() {
   it("should handle actions sent without a payload", function (done) {
     let unsub = store.subscribe(() => {
       let state = store.getState();
-      expect(state.test.SCStoreControllerTest).to.equal(true);
+      expect(state.test.SCReduxStoreControllerTest).to.equal(true);
       unsub();
       done();
     });
@@ -116,7 +116,7 @@ describe("SCStoreController", function() {
   it("should handle actions sent with a payload", function (done) {
     let unsub = store.subscribe(() => {
       let state = store.getState();
-      expect(state.test.SCStoreControllerPayloadTest).to.equal("world");
+      expect(state.test.SCReduxStoreControllerPayloadTest).to.equal("world");
       unsub();
       done();
     });
