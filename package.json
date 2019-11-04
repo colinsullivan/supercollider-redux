@@ -26,9 +26,11 @@
   },
   "homepage": "https://github.com/colinsullivan/supercollider-redux#readme",
   "dependencies": {
+    "@supercollider/lang": "file:../patches/supercolliderjs/packages/lang",
+    "@supercollider/scapi": "file:../patches/supercolliderjs/packages/scapi",
+    "@supercollider/server": "file:../patches/supercolliderjs/packages/server",
     "osc": "^2.3.1",
-    "redux": "^3.7.2",
-    "supercolliderjs": "^0.14.2"
+    "redux": "^3.7.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
@@ -37,6 +39,7 @@
     "@babel/register": "^7.6.2",
     "babel-eslint": "^10.0.3",
     "chai": "^4.2.0",
+    "eslint": "^6.6.0",
     "mocha": "^6.2.2"
   },
   "babel": {

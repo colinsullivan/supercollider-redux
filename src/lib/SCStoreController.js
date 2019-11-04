@@ -8,7 +8,7 @@
  *  @license    Licensed under the MIT license.
  **/
 
-import sc from "supercolliderjs";
+import SCAPI from "@supercollider/scapi";
 import SCRedux from "../";
 
 /**
@@ -37,7 +37,7 @@ class SCStoreController {
     this.store.dispatch(SCRedux.actions.supercolliderInitStarted());
 
     // reads config file located at: ./.supercollider.yaml
-    var api = new sc.scapi();
+    var api = new SCAPI();
 
     this.scapi = api;
     api.log.debug = true;
@@ -56,21 +56,13 @@ class SCStoreController {
     });
   }
   handle_api_error(err) {
-    console.log("API ERROR!");
+    console.log("SCStoreController api ERROR!");
     console.log("err");
     console.log(err);
   }
-  getAPICallIndex() {
-    if (this._apiCallIndex < Number.MAX_SAFE_INTEGER - 1) {
-      this._apiCallIndex++;
-    } else {
-      this._apiCallIndex = 0;
-    }
-    return this._apiCallIndex;
-  }
   call(apiMethodName, args) {
     return this.scapi
-      .call(this.getAPICallIndex(), apiMethodName, args)
+      .call(undefined, apiMethodName, args)
       .catch(err => this.handle_api_error(err));
   }
   disconnect() {

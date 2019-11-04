@@ -14,7 +14,8 @@ import chai from "chai"
 import { createStore, combineReducers } from "redux"
 import SCRedux from "../"
 
-import sc from "supercolliderjs"
+//import sc from "supercolliderjs"
+import {resolveOptions, boot} from "@supercollider/lang";
 
 const SCStoreController = SCRedux.SCStoreController
 const expect = chai.expect;
@@ -54,21 +55,19 @@ describe("SCStoreController", function() {
   
   if (!process.env.EXTERNAL_SCLANG) {
     it("should start", function (done) {
-      sc.resolveOptions(null, {
-        debug: true
-      }).then((options) => {
-        options.debug = true;
-        options.echo = true;
-        sc.lang.boot(options).then((lang) => {
-          sclang = lang;
-          lang.interpret('API.mountDuplexOSC();').then(() => {
-            done();
-          }).catch(done);
-        }).catch((err) => {
-          console.log("err");
-          console.log(err);
-          done(new Error("sclang failed to boot"));
-        });
+      const options = resolveOptions({
+        debug: true,
+        echo: true
+      });
+      boot(options).then((lang) => {
+        sclang = lang;
+        lang.interpret('API.mountDuplexOSC();').then(() => {
+          done();
+        }).catch(done);
+      }).catch((err) => {
+        console.log("err");
+        console.log(err);
+        done(new Error("sclang failed to boot"));
       });
     });
 

@@ -19,13 +19,11 @@
     store.dispatch((
       type: SCRedux.actionTypes['SUPERCOLLIDER_READY']
     ));
-    reply.value();
   },
   setState: {
     arg reply, state;
     var store = StateStore.getInstance();
     //"StateStore.api.setState".postln;
     store.setState(state);
-    reply.value();
   }
 );
