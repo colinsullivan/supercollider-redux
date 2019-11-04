@@ -26,18 +26,18 @@
   },
   "homepage": "https://github.com/colinsullivan/supercollider-redux#readme",
   "dependencies": {
-    "osc": "^2.2.3",
-    "redux": "^3.6.0",
+    "osc": "^2.3.1",
+    "redux": "^3.7.2",
     "supercolliderjs": "^0.14.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/register": "^7.0.0",
-    "babel-eslint": "^10.0.1",
-    "chai": "^3.5.0",
-    "mocha": "^3.3.0"
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.6.2",
+    "babel-eslint": "^10.0.3",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2"
   },
   "babel": {
     "presets": [
