@@ -1,7 +1,7 @@
 /**
- *  @file       StateStore.api.scd
+ *  @file       SCReduxStore.api.scd
  *
- *	@desc       API for StateStore singleton.  Uses the SuperCollider API
+ *	@desc       API for SCReduxStore singleton.  Uses the SuperCollider API
  *              quark.
  *
  *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
@@ -13,8 +13,8 @@
 (
   init: {
     arg reply, initialState;
-    var store = StateStore.getInstance();
-    //"StateStore.api.init".postln();
+    var store = SCReduxStore.getInstance();
+    //"SCReduxStore.api.init".postln();
     store.setState(initialState);
     store.dispatch((
       type: SCRedux.actionTypes['SC_STORE_READY']
@@ -22,8 +22,8 @@
   },
   setState: {
     arg reply, state;
-    var store = StateStore.getInstance();
-    //"StateStore.api.setState".postln;
+    var store = SCReduxStore.getInstance();
+    //"SCReduxStore.api.setState".postln;
     store.setState(state);
   }
 );

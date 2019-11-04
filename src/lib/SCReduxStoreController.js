@@ -48,11 +48,11 @@ class SCReduxStoreController {
     api.connect();
 
     // send init message to the SC store once
-    this.call("StateStore.init", [this.store.getState()]);
+    this.call("SCReduxStore.init", [this.store.getState()]);
 
     // send `setState` message to the SC store whenever state changes
     this.store.subscribe(() => {
-      this.call("StateStore.setState", [this.store.getState()]);
+      this.call("SCReduxStore.setState", [this.store.getState()]);
     });
   }
   handle_api_error(err) {

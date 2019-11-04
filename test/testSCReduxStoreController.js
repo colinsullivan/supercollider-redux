@@ -109,7 +109,7 @@ describe("SCReduxStoreController", function() {
       done();
     });
     sclang
-      .interpret('StateStore.getInstance().dispatch((type: "SCSTORECONTROLLER_TEST"))')
+      .interpret('SCReduxStore.getInstance().dispatch((type: "SCSTORECONTROLLER_TEST"))')
       .catch(done);
   });
 
@@ -121,7 +121,7 @@ describe("SCReduxStoreController", function() {
       done();
     });
     sclang
-      .interpret('StateStore.getInstance().dispatch((type: "SCSTORECONTROLLER_PAYLOAD_TEST", payload: (hello: "world")))')
+      .interpret('SCReduxStore.getInstance().dispatch((type: "SCSTORECONTROLLER_PAYLOAD_TEST", payload: (hello: "world")))')
       .catch(done);
   });
 
