@@ -3,7 +3,7 @@ import * as actions from "./lib/actions"
 import reducer from "./lib/reducers"
 import SCReduxStoreController from "./lib/SCReduxStoreController"
 import OSCActionListener from './lib/OSCActionListener';
-import { STORE_READY_STATES, DEFAULT_MOUNT_POINT } from './lib/constants';
+import { READY_STATES, DEFAULT_MOUNT_POINT } from './lib/constants';
 
 export default {
   actionTypes,
@@ -12,5 +12,5 @@ export default {
   DEFAULT_MOUNT_POINT,
   SCReduxStoreController,
   OSCActionListener,
-  STORE_READY_STATES
+  READY_STATES
 }

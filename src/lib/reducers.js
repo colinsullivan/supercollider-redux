@@ -9,21 +9,22 @@
  **/
 
 import * as actionTypes from "./actionTypes";
-import { STORE_READY_STATES } from "./constants";
+import { READY_STATES } from "./constants";
 
 export function create_default_state() {
   return {
-    scStoreReadyState: STORE_READY_STATES.NOT_STARTED
+    scStoreReadyState: READY_STATES.NOT_STARTED,
+    scLangReadyState: READY_STATES.NOT_STARTED
   };
 }
 export default function(state = create_default_state(), action) {
   switch (action.type) {
     case actionTypes.SC_STORE_INIT:
-      state.scStoreReadyState = STORE_READY_STATES.INIT;
+      state.scStoreReadyState = READY_STATES.INIT;
       break;
 
     case actionTypes.SC_STORE_READY:
-      state.scStoreReadyState = STORE_READY_STATES.READY;
+      state.scStoreReadyState = READY_STATES.READY;
       break;
 
     default:
