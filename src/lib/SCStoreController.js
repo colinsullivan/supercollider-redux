@@ -1,5 +1,5 @@
 /**
- *  @file       SCReduxStoreController.js
+ *  @file       SCStoreController.js
  *
  *
  *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
@@ -12,14 +12,14 @@ import SCAPI from "@supercollider/scapi";
 import SCRedux from "../";
 
 /**
- *  @class        SCReduxStoreController
+ *  @class        SCStoreController
  *
  *  @classdesc    Forward state to replica store in SuperCollider.  Also
  *  forward actions incoming from SuperCollider to the Redux store.
  **/
-class SCReduxStoreController {
+class SCStoreController {
   /**
-   *  Creates an SCReduxStoreController and sends `init` to SC.
+   *  Creates an SCStoreController and sends `init` to SC.
    *
    *  @param  {redux.Store}  store - The state store.
    **/
@@ -28,6 +28,7 @@ class SCReduxStoreController {
     this._apiCallIndex = 0;
 
     this.actionListener = new SCRedux.OSCActionListener({
+      // TODO :configurable port
       localPort: 3335,
       store,
       clientId: "supercollider"
@@ -40,8 +41,6 @@ class SCReduxStoreController {
     var api = new SCAPI();
 
     this.scapi = api;
-    api.log.debug = true;
-    api.log.echo = true;
 
     api.on("error", err => this.handle_api_error(err));
 
@@ -56,7 +55,7 @@ class SCReduxStoreController {
     });
   }
   handle_api_error(err) {
-    console.log("SCReduxStoreController api ERROR!");
+    console.log("SCStoreController api ERROR!");
     console.log("err");
     console.log(err);
   }
@@ -65,10 +64,10 @@ class SCReduxStoreController {
       .call(undefined, apiMethodName, args)
       .catch(err => this.handle_api_error(err));
   }
-  disconnect() {
-    this.scapi.disconnect();
+  quit() {
+    this.scapi.quit();
     this.actionListener.quit();
   }
 }
 
-export default SCReduxStoreController;
+export default SCStoreController;

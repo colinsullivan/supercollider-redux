@@ -8,7 +8,13 @@
  *  @license    Licensed under the MIT license.
  **/
 
-import * as actionTypes from "./actionTypes";
+import {
+  SC_STORE_INIT,
+  SC_STORE_READY,
+  SC_LANG_INIT,
+  SC_LANG_READY,
+  SC_LANG_QUIT
+} from "./actionTypes";
 import { READY_STATES } from "./constants";
 
 export function create_default_state() {
@@ -19,13 +25,35 @@ export function create_default_state() {
 }
 export default function(state = create_default_state(), action) {
   switch (action.type) {
-    case actionTypes.SC_STORE_INIT:
-      state.scStoreReadyState = READY_STATES.INIT;
-      break;
+    case SC_STORE_INIT:
+      return {
+        ...state,
+        scStoreReadyState: READY_STATES.INIT
+      };
 
-    case actionTypes.SC_STORE_READY:
-      state.scStoreReadyState = READY_STATES.READY;
-      break;
+    case SC_STORE_READY:
+      return {
+        ...state,
+        scStoreReadyState: READY_STATES.READY
+      };
+
+    case SC_LANG_INIT:
+      return {
+        ...state,
+        scLangReadyState: READY_STATES.INIT
+      };
+
+    case SC_LANG_READY:
+      return {
+        ...state,
+        scLangReadyState: READY_STATES.READY
+      };
+
+    case SC_LANG_QUIT:
+      return {
+        ...state,
+        scLangReadyState: READY_STATES.NOT_STARTED
+      };
 
     default:
       break;

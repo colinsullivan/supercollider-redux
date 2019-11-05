@@ -35,6 +35,7 @@ SCReduxStore {
   }
   init {
     dispatchSocketsDict = (
+      // TODO: configurable port
       \primary: NetAddr.new("127.0.0.1", 3335)
     );
 
