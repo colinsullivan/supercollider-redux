@@ -47,8 +47,6 @@ SCReduxTempoClockController : Object {
       clock = params['clock'];
     });
 
-    this.setClockTempoFromState();
-
     store.subscribe({
       this.handleStateChange();
     });

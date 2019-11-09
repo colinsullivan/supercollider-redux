@@ -36,9 +36,17 @@ class SCLangController {
         .then(lang => {
           this.sclang = lang;
 
-          lang.interpret("API.mountDuplexOSC();");
-          this.store.dispatch(scLangReady());
-          res(lang);
+          lang.interpret(`
+          API.mountDuplexOSC();
+          s.waitForBoot({
+            SCReduxStore.getInstance().dispatch((
+              type: SCRedux.actionTypes['SC_SYNTH_READY']
+            ));
+          });
+          `).then(() => {
+            this.store.dispatch(scLangReady());
+            res(lang);
+          });
         })
         .catch(rej);
     });
