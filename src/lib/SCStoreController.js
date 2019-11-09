@@ -65,7 +65,7 @@ class SCStoreController {
       .catch(err => this.handle_api_error(err));
   }
   quit() {
-    this.scapi.quit();
+    this.scapi.disconnect();
     this.actionListener.quit();
   }
 }
