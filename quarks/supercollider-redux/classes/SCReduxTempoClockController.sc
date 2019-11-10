@@ -15,6 +15,7 @@ SCReduxTempoClockController : Object {
   var <>clock,
     store,
     lastTempoBPM;
+
   *new {
     arg params;
 
@@ -63,7 +64,7 @@ SCReduxTempoClockController : Object {
     var state = store.getState();
     var tempoBPM = this.getTempoFromState();
 
-    if (lastTempoBPM !== tempoBPM, {
+    if (lastTempoBPM != tempoBPM, {
       //"SCReduxTempoClockController: Changing tempo abruptly...".postln();
       this.setClockTempoFromState();
     });

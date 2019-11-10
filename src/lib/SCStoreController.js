@@ -46,6 +46,8 @@ class SCStoreController {
 
     api.connect();
 
+    // TODO: customize sent state with selector
+
     // send init message to the SC store once
     this.call("SCReduxStore.init", [this.store.getState()]);
 
