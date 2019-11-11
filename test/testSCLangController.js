@@ -40,8 +40,7 @@ s.options.outDevice = "JackRouter";
   it("should finish booting", function(done) {
     bootRes
       .then(() => {
-        scStoreController.init();
-        done();
+        scStoreController.init().then(() => done()).catch(done);
       })
       .catch(done);
   });

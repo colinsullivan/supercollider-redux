@@ -59,14 +59,15 @@ describe("SCStoreController", function() {
     sclangController.boot().then((lang) => {
       sclang = lang;
 
-      scStoreController.init();
+      scStoreController.init().then(() => {
+        state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT]
 
-      state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT]
+        expect(state.scStoreReadyState).to.equal(
+          READY_STATES.INIT
+        );
+        done();
+      }).catch(done);
 
-      expect(state.scStoreReadyState).to.equal(
-        READY_STATES.INIT
-      );
-      done();
     }).catch(done);
 
   });

@@ -47,32 +47,39 @@ class SCStoreController {
     this.scStateSelector = scStateSelector;
   }
   init () {
-    // Sets the SC store ready state
-    this.store.dispatch(SCRedux.actions.scStoreInit());
+    return new Promise((res, rej) => {
+      // Sets the SC store ready state
+      this.store.dispatch(SCRedux.actions.scStoreInit());
 
-    // reads config file located at: ./.supercollider.yaml
-    const api = new SCAPI();
+      // reads config file located at: ./.supercollider.yaml
+      const api = new SCAPI();
 
-    this.scapi = api;
+      this.scapi = api;
 
-    api.on("error", err => this.handle_api_error(err));
+      api.on("error", err => {
+        this.handle_api_error(err);
+        rej(err);
+      });
 
-    api.connect();
+      api.connect();
 
-    // TODO: customize sent state with selector
+      // send init message to the SC store once
+      console.log("SCReduxStore.init");
+      this.call("SCReduxStore.init", [this.store.getState()]).then(() => {
+        // send `setState` message to the SC store whenever state changes
+        this.prevState = null;
+        let state;
+        console.log("SCStoreController.subscribe");
+        this.store.subscribe(() => {
+          state = this.scStateSelector(this.store.getState());
+          if (this.prevState !== state) {
+            this.prevState = state;
+            this.call("SCReduxStore.setState", [state]);
+          }
+        });
 
-    // send init message to the SC store once
-    this.call("SCReduxStore.init", [this.store.getState()]);
-
-    // send `setState` message to the SC store whenever state changes
-    this.prevState = null;
-    let state;
-    this.store.subscribe(() => {
-      state = this.scStateSelector(this.store.getState());
-      if (this.prevState !== state) {
-        this.prevState = state;
-        this.call("SCReduxStore.setState", [state]);
-      }
+        res();
+      }).catch(rej);
     });
   }
   handle_api_error(err) {
@@ -82,8 +89,7 @@ class SCStoreController {
   }
   call(apiMethodName, args) {
     return this.scapi
-      .call(undefined, apiMethodName, args)
-      .catch(err => this.handle_api_error(err));
+      .call(undefined, apiMethodName, args);
   }
   quit() {
     this.scapi.disconnect();

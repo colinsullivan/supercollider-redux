@@ -19,11 +19,17 @@
     store.dispatch((
       type: SCRedux.actionTypes['SC_STORE_READY']
     ));
+    reply.value((
+      status: "ok"
+    ));
   },
   setState: {
     arg reply, state;
     var store = SCReduxStore.getInstance();
     //"SCReduxStore.api.setState".postln;
     store.setState(state);
+    reply.value((
+      status: "ok"
+    ));
   }
 );
