@@ -25,13 +25,18 @@ class SCStoreController {
    *  @param  {redux.Store}  store - The state store.
    *  @param  {Number}  props.actionListenerPort - The UDP port to listen for 
    *  incoming actions from the SCReduxStore in SuperCollider.
+   *  @param  {Function}  props.scStateSelector - A function which receives
+   *  state and outputs the portion of state to be forwarded to SuperCollider
+   *  on `setState`.  Written `scStateSelector` to suggest it is implemented
+   *  as a `reselect` selector.
    **/
   constructor(store, props = {}) {
     this.store = store;
     this._apiCallIndex = 0;
 
     const {
-      actionListenerPort=DEFAULT_ACTION_LISTENER_PORT
+      actionListenerPort=DEFAULT_ACTION_LISTENER_PORT,
+      scStateSelector = state => state
     } = props;
 
     this.actionListener = new SCRedux.OSCActionListener({
@@ -39,6 +44,7 @@ class SCStoreController {
       store,
       clientId: "supercollider"
     });
+    this.scStateSelector = scStateSelector;
   }
   init () {
     // Sets the SC store ready state
@@ -59,8 +65,14 @@ class SCStoreController {
     this.call("SCReduxStore.init", [this.store.getState()]);
 
     // send `setState` message to the SC store whenever state changes
+    this.prevState = null;
+    let state;
     this.store.subscribe(() => {
-      this.call("SCReduxStore.setState", [this.store.getState()]);
+      state = this.scStateSelector(this.store.getState());
+      if (this.prevState !== state) {
+        this.prevState = state;
+        this.call("SCReduxStore.setState", [state]);
+      }
     });
   }
   handle_api_error(err) {
