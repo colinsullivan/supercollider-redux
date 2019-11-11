@@ -9,15 +9,10 @@
  *  @license    Licensed under the MIT license.
  **/
 
-import path from "path";
 import chai from "chai";
 import { createStore, combineReducers } from "redux";
 import SCRedux from "../src/";
 
-//import sc from "supercolliderjs"
-import { resolveOptions, boot } from "@supercollider/lang";
-
-const SCStoreController = SCRedux.SCStoreController;
 const expect = chai.expect;
 
 var rootReducer = combineReducers({
@@ -42,56 +37,38 @@ var rootReducer = combineReducers({
   }
 });
 
-function configure_store() {
-  return createStore(rootReducer);
-}
+//function configure_store() {
+  //return createStore(rootReducer);
+//}
 
-var quarkDirectoryPath = path.resolve("./quarks/supercollider-redux/"),
-  sclang,
-  scStoreController;
+const {READY_STATES, SCLangController, SCStoreController} = SCRedux;
 
 describe("SCStoreController", function() {
-  var store = configure_store();
 
-  if (!process.env.EXTERNAL_SCLANG) {
-    it("should start", function(done) {
-      const options = resolveOptions({
-        debug: true,
-        echo: true
-      });
-      boot(options)
-        .then(lang => {
-          sclang = lang;
-          lang
-            .interpret("API.mountDuplexOSC();")
-            .then(() => {
-              done();
-            })
-            .catch(done);
-        })
-        .catch(err => {
-          console.log("err");
-          console.log(err);
-          done(new Error("sclang failed to boot"));
-        });
-    });
+  const store = createStore(rootReducer);
+  let sclangController, scStoreController, sclang;
 
-    it("should have loaded our local quark", function(done) {
-      sclang.interpret("Quarks.installedPaths();").then(function(answer) {
-        expect(answer).to.include(quarkDirectoryPath);
-        done();
-      }, console.error);
-    });
-  }
 
-  it("should have started SC init", function() {
+  it("should have set store ready state on boot", function(done) {
+    sclangController = new SCLangController(store);
     scStoreController = new SCStoreController(store);
+    let state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT];
 
-    const state = store.getState();
+    expect(state.scStoreReadyState).to.equal(READY_STATES.NOT_STARTED);
 
-    expect(state[SCRedux.DEFAULT_MOUNT_POINT].scStoreReadyState).to.equal(
-      "INIT"
-    );
+    sclangController.boot().then((lang) => {
+      sclang = lang;
+
+      scStoreController.init();
+
+      state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT]
+
+      expect(state.scStoreReadyState).to.equal(
+        READY_STATES.INIT
+      );
+      done();
+    }).catch(done);
+
   });
 
   var expectedInitTime = 450;

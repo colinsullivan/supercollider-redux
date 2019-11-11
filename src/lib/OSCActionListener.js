@@ -34,7 +34,7 @@ class OSCActionListener {
   init() {
     //console.log(`binding to 0.0.0.0:${this.params.localPort}`);
     this.oscPort = new osc.UDPPort({
-      localAddress: "0.0.0.0",
+      localAddress: "127.0.0.1",
       localPort: this.params.localPort
     });
     this.oscPort.on("message", msg => {
@@ -46,9 +46,9 @@ class OSCActionListener {
       // appears, it implies we start filling the payload with subsequent
       // key value pairs
 
-      let actionPairs = msg.args;
+      const actionPairs = msg.args;
       let i;
-      let action = {};
+      const action = {};
       if (this.clientId) {
         action.clientId = this.clientId;
       }

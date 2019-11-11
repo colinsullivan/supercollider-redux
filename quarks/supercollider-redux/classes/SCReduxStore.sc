@@ -24,7 +24,8 @@ SCReduxStore {
     dispatchSocketsDict;
 
   *new {
-    ^super.new.init();
+    arg props;
+    ^super.new.init(props);
   }
   *getInstance {
     if (this.instance == nil, {
@@ -34,9 +35,18 @@ SCReduxStore {
     ^this.instance;
   }
   init {
+    arg props;
+    var actionListenerPort;
+    if (props.isNil(), {
+      props = Dictionary.new();
+    });
+    if (props.at('actionListenerPort').isNil(), {
+      actionListenerPort = SCRedux.defaultActionListenerPort();
+    }, {
+      actionListenerPort = props['actionListenerPort'];
+    });
     dispatchSocketsDict = (
-      // TODO: configurable port
-      \primary: NetAddr.new("127.0.0.1", 3335)
+      \primary: NetAddr.new("127.0.0.1", actionListenerPort)
     );
 
     state = nil;

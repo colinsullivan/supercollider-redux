@@ -4,3 +4,4 @@ export const READY_STATES = {
   READY: "READY"
 };
 export const DEFAULT_MOUNT_POINT = "SCRedux";
+export const DEFAULT_ACTION_LISTENER_PORT = 3335;

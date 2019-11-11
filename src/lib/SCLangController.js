@@ -23,8 +23,26 @@ class SCLangController {
   /**
    *  Creates the SCLangController, reading the supercolliderjs config file
    *  with a call to `resolveOptions`.  Does not boot sclang.
+   *
+   *  @param  {redux.Store}  store - The state store.
+   *  @param  {Object}  props.sclangOptions - Options for supercolliderjs
    **/
-  constructor(store, sclangOptions = {}) {
+  constructor(store, props = {}) {
+    const {
+      sclangOptions = {},
+      interpretOnLangBoot = ""
+    } = props;
+
+    this.interpretOnLangBoot = `
+API.mountDuplexOSC();
+s.waitForBoot({
+  SCReduxStore.getInstance().dispatch((
+    type: SCRedux.actionTypes['SC_SYNTH_READY']
+  ));
+});
+${interpretOnLangBoot}
+    `;
+
     this.store = store;
     this.options = resolveOptions(sclangOptions);
     this.sclang = null;
@@ -36,14 +54,7 @@ class SCLangController {
         .then(lang => {
           this.sclang = lang;
 
-          lang.interpret(`
-          API.mountDuplexOSC();
-          s.waitForBoot({
-            SCReduxStore.getInstance().dispatch((
-              type: SCRedux.actionTypes['SC_SYNTH_READY']
-            ));
-          });
-          `).then(() => {
+          lang.interpret(this.interpretOnLangBoot).then(() => {
             this.store.dispatch(scLangReady());
             res(lang);
           });

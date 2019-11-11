@@ -18,4 +18,12 @@ SCRedux : Object {
       'SC_SYNTH_READY': "SUPERCOLLIDER_REDUX-SC_SYNTH_READY"
     )
   }
+  *readyStates {
+    ^('NOT_STARTED': "NOT_STARTED",
+      'INIT': "INIT",
+      'READY': "READY")
+  }
+  *defaultActionListenerPort {
+    ^3335;
+  }
 }

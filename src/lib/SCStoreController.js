@@ -10,6 +10,7 @@
 
 import SCAPI from "@supercollider/scapi";
 import SCRedux from "../";
+import { DEFAULT_ACTION_LISTENER_PORT } from "./constants";
 
 /**
  *  @class        SCStoreController
@@ -22,23 +23,29 @@ class SCStoreController {
    *  Creates an SCStoreController and sends `init` to SC.
    *
    *  @param  {redux.Store}  store - The state store.
+   *  @param  {Number}  props.actionListenerPort - The UDP port to listen for 
+   *  incoming actions from the SCReduxStore in SuperCollider.
    **/
-  constructor(store) {
+  constructor(store, props = {}) {
     this.store = store;
     this._apiCallIndex = 0;
 
+    const {
+      actionListenerPort=DEFAULT_ACTION_LISTENER_PORT
+    } = props;
+
     this.actionListener = new SCRedux.OSCActionListener({
-      // TODO :configurable port
-      localPort: 3335,
+      localPort: actionListenerPort,
       store,
       clientId: "supercollider"
     });
-
+  }
+  init () {
     // Sets the SC store ready state
     this.store.dispatch(SCRedux.actions.scStoreInit());
 
     // reads config file located at: ./.supercollider.yaml
-    var api = new SCAPI();
+    const api = new SCAPI();
 
     this.scapi = api;
 
