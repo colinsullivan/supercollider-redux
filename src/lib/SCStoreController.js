@@ -64,12 +64,10 @@ class SCStoreController {
       api.connect();
 
       // send init message to the SC store once
-      console.log("SCReduxStore.init");
       this.call("SCReduxStore.init", [this.store.getState()]).then(() => {
         // send `setState` message to the SC store whenever state changes
         this.prevState = null;
         let state;
-        console.log("SCStoreController.subscribe");
         this.store.subscribe(() => {
           state = this.scStateSelector(this.store.getState());
           if (this.prevState !== state) {

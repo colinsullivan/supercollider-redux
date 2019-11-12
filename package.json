@@ -27,7 +27,7 @@
   "homepage": "https://github.com/colinsullivan/supercollider-redux#readme",
   "dependencies": {
     "@supercollider/lang": "^1.0.0-alpha.1",
-    "@supercollider/scapi": "^1.0.0-alpha.0",
+    "@supercollider/scapi": "file:../patches/supercolliderjs/packages/scapi",
     "osc": "^2.3.1",
     "redux": "^3.7.2"
   },
