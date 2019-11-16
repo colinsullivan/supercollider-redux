@@ -1,0 +1,5 @@
+sclang: /usr/local/bin/sclang
+scsynth: /usr/local/bin/scsynth
+debug: true
+echo: true
+stdin: false
