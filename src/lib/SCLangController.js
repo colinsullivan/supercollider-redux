@@ -15,9 +15,9 @@ import { scLangInit, scLangReady, scLangQuit } from "./actions";
 /**
  *  @class        SCLangController
  *
- *  @classdesc    Start sclang using @supercollider/lang, dispatching sclang
- *  ready state to store and running initial sclang commands needed for
- *  supercollider-redux to work through the API quark.
+ *  @classdesc    Start sclang using @supercollider/lang, dispatch actions
+ *  during init sequence, set up a dispatch to run within sclang once scsynth
+ *  has started.
  **/
 class SCLangController {
   /**

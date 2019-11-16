@@ -25,6 +25,13 @@ function parse_payload_pairs(payloadPairs) {
  *  to the state store.
  **/
 class OSCActionListener {
+  /**
+   *  @param  {Store}  params.store - The state store
+   *  @param  {String}  params.clientId - A unique string to indicate the dispatch
+   *  origin.
+   *  @param  {Number}  params.localPort - A number of which port to listen on
+   *  for incoming actions.
+   **/
   constructor(params) {
     this.params = params;
     this.store = params.store;
