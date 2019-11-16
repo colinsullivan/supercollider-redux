@@ -7,15 +7,40 @@
  *  @license    Licensed under the MIT license.
  **/
 
-import * as actionTypes from "./actionTypes";
-export function supercolliderReady() {
+import {
+  SC_STORE_READY,
+  SC_STORE_INIT,
+  SC_LANG_READY,
+  SC_LANG_INIT,
+  SC_LANG_QUIT
+} from "./actionTypes";
+
+export function scStoreReady() {
   return {
-    type: actionTypes.SUPERCOLLIDER_READY
+    type: SC_STORE_READY
   };
 }
 
-export function supercolliderInitStarted() {
+export function scStoreInit() {
   return {
-    type: actionTypes.SUPERCOLLIDER_INIT_START
+    type: SC_STORE_INIT
+  };
+}
+
+export function scLangInit() {
+  return {
+    type: SC_LANG_INIT
+  };
+}
+
+export function scLangReady() {
+  return {
+    type: SC_LANG_READY
+  };
+}
+
+export function scLangQuit() {
+  return {
+    type: SC_LANG_QUIT
   };
 }

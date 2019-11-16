@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "browser": "lib/index_browser.js",
   "scripts": {
-    "test": "mocha --timeout 10000 --slow 4000 --require @babel/register",
+    "test": "NODE_ENV=test nyc mocha --require @babel/register --require source-map-support/register --timeout 10000 --slow 4000 --bail",
     "build": "rm -Rf lib && babel src --out-dir lib",
     "build_docs": "plantuml -tpng docs/*.puml"
   },
@@ -26,23 +26,44 @@
   },
   "homepage": "https://github.com/colinsullivan/supercollider-redux#readme",
   "dependencies": {
-    "osc": "^2.2.3",
-    "redux": "^3.6.0",
-    "supercolliderjs": "^0.14.2"
+    "@supercollider/lang": "^1.0.0-alpha.1",
+    "@supercollider/scapi": "^1.0.0-alpha.2",
+    "osc": "^2.3.1",
+    "redux": "^3.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/register": "^7.0.0",
-    "babel-eslint": "^10.0.1",
-    "chai": "^3.5.0",
-    "mocha": "^3.3.0"
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.6.2",
+    "babel-eslint": "^10.0.3",
+    "babel-plugin-istanbul": "^5.2.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.6.0",
+    "mocha": "^6.2.2",
+    "nyc": "^14.1.1",
+    "source-map-support": "^0.5.16"
   },
   "babel": {
+    "sourceMaps": true,
     "presets": [
-      "@babel/preset-env"
-    ]
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": true
+          }
+        }
+      ]
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -56,7 +77,9 @@
     "rules": {
       "no-console": 0,
       "no-use-before-define": "error",
-      "block-scoped-var": "error"
+      "block-scoped-var": "error",
+      "no-case-declarations": 0,
+      "prefer-const": "error"
     }
   }
 }

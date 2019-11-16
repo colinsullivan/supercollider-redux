@@ -8,8 +8,9 @@
  *  @license    Licensed under the MIT license.
  **/
 
-import sc from "supercolliderjs";
+import SCAPI from "@supercollider/scapi";
 import SCRedux from "../";
+import { DEFAULT_ACTION_LISTENER_PORT } from "./constants";
 
 /**
  *  @class        SCStoreController
@@ -19,63 +20,86 @@ import SCRedux from "../";
  **/
 class SCStoreController {
   /**
-   *  Creates an SCStoreController and sends `init` to SC.
+   *  Creates an SCStoreController and sends `init` to SC, creating an 
+   *  OSCActionListener to receive actions dispatched from the SCReduxStore
+   *  in SuperCollider and dispatch them to the store.
    *
    *  @param  {redux.Store}  store - The state store.
+   *  @param  {Number}  props.actionListenerPort - The UDP port to listen for 
+   *  incoming actions from the SCReduxStore in SuperCollider.
+   *  @param  {Function}  props.scStateSelector - A function which receives
+   *  state and outputs the portion of state to be forwarded to SuperCollider
+   *  on `setState`.  Written `scStateSelector` to suggest it is implemented
+   *  as a `reselect` selector.
    **/
-  constructor(store) {
+  constructor(store, props = {}) {
     this.store = store;
     this._apiCallIndex = 0;
 
+    const {
+      actionListenerPort=DEFAULT_ACTION_LISTENER_PORT,
+      scStateSelector = state => state
+    } = props;
+
     this.actionListener = new SCRedux.OSCActionListener({
-      localPort: 3335,
+      localPort: actionListenerPort,
       store,
       clientId: "supercollider"
     });
+    this.scStateSelector = scStateSelector;
 
-    // Sets the SC store ready state
-    this.store.dispatch(SCRedux.actions.supercolliderInitStarted());
-
-    // reads config file located at: ./.supercollider.yaml
-    var api = new sc.scapi();
+    const api = new SCAPI();
 
     this.scapi = api;
-    api.log.debug = true;
-    api.log.echo = true;
 
-    api.on("error", err => this.handle_api_error(err));
+    api.on("error", err => {
+      this.handle_api_error(err);
+    });
+  }
+  init () {
+    return new Promise((res, rej) => {
+      // Sets the SC store ready state
+      this.store.dispatch(SCRedux.actions.scStoreInit());
 
-    api.connect();
+      // Connects the API to the API Quark (assumes sclang is running and ready)
+      this.scapi.connect();
 
-    // send init message to the SC store once
-    this.call("StateStore.init", [this.store.getState()]);
+      // sends init message to the SC store once
+      this.call("SCReduxStore.init", [this.store.getState()]).then(() => {
+        // sends `setState` message to the SC store whenever state changes
+        this.prevState = null;
+        let state;
+        this.unsubscribe = this.store.subscribe(() => {
+          state = this.scStateSelector(this.store.getState());
+          if (this.prevState !== state) {
+            this.prevState = state;
+            this.call("SCReduxStore.setState", [state]);
+          }
+        });
 
-    // send `setState` message to the SC store whenever state changes
-    this.store.subscribe(() => {
-      this.call("StateStore.setState", [this.store.getState()]);
+        res();
+      }).catch(rej);
     });
   }
   handle_api_error(err) {
-    console.log("API ERROR!");
+    console.log("SCStoreController api ERROR!");
     console.log("err");
     console.log(err);
   }
-  getAPICallIndex() {
-    if (this._apiCallIndex < Number.MAX_SAFE_INTEGER - 1) {
-      this._apiCallIndex++;
-    } else {
-      this._apiCallIndex = 0;
-    }
-    return this._apiCallIndex;
-  }
   call(apiMethodName, args) {
     return this.scapi
-      .call(this.getAPICallIndex(), apiMethodName, args)
-      .catch(err => this.handle_api_error(err));
+      .call(undefined, apiMethodName, args);
   }
-  disconnect() {
-    this.scapi.disconnect();
-    this.actionListener.quit();
+  quit() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+    if (this.scapi) {
+      this.scapi.disconnect();
+    }
+    if (this.actionListener) {
+      this.actionListener.quit();
+    }
   }
 }
 

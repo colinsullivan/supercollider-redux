@@ -1,5 +1,5 @@
 /**
- *  @file       StateStore.sc
+ *  @file       SCReduxStore.sc
  *
  *
  *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
@@ -9,33 +9,44 @@
  **/
 
 /**
- *  @class        StateStore
+ *  @class        SCReduxStore
  *
  *  @classdesc    Provides a singleton state store which expects to receive
- *  state from OSC messages sent over the StateStore API (see apis/).  Also
+ *  state from OSC messages sent over the SCReduxStore API (see apis/).  Also
  *  dispatches actions back up to the primary state store and publishes
  *  state updates to all local subscriber functions.
  **/
 
-StateStore {
+SCReduxStore {
   classvar <>instance;
   var state,
     subscribers,
     dispatchSocketsDict;
 
   *new {
-    ^super.new.init();
+    arg props;
+    ^super.new.init(props);
   }
   *getInstance {
     if (this.instance == nil, {
-      this.instance = StateStore.new();
+      this.instance = SCReduxStore.new();
     });
 
     ^this.instance;
   }
   init {
+    arg props;
+    var actionListenerPort;
+    if (props.isNil(), {
+      props = Dictionary.new();
+    });
+    if (props.at('actionListenerPort').isNil(), {
+      actionListenerPort = SCRedux.defaultActionListenerPort();
+    }, {
+      actionListenerPort = props['actionListenerPort'];
+    });
     dispatchSocketsDict = (
-      \primary: NetAddr.new("127.0.0.1", 3335)
+      \primary: NetAddr.new("127.0.0.1", actionListenerPort)
     );
 
     state = nil;
@@ -48,7 +59,7 @@ StateStore {
    *  Supporting multiple dispatch locations.  To set, pass a dict with 
    *  each item including `addr` and `port`:
    *  
-   *    var store = StateStore.getInstance();
+   *    var store = SCReduxStore.getInstance();
    *
    *    store.setDispatchLocations((
    *      \one: (

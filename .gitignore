@@ -1,4 +1,4 @@
 *.swp
 node_modules
-.supercollider.yaml
 *.DS_Store
+*.nyc_output

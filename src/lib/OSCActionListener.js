@@ -25,16 +25,20 @@ function parse_payload_pairs(payloadPairs) {
  *  to the state store.
  **/
 class OSCActionListener {
+  /**
+   *  @param  {Store}  params.store - The state store
+   *  @param  {String}  params.clientId - A unique string to indicate the dispatch
+   *  origin.
+   *  @param  {Number}  params.localPort - A number of which port to listen on
+   *  for incoming actions.
+   **/
   constructor(params) {
     this.params = params;
     this.store = params.store;
     this.clientId = params.clientId || null;
-    this.init();
-  }
-  init() {
     //console.log(`binding to 0.0.0.0:${this.params.localPort}`);
     this.oscPort = new osc.UDPPort({
-      localAddress: "0.0.0.0",
+      localAddress: "127.0.0.1",
       localPort: this.params.localPort
     });
     this.oscPort.on("message", msg => {
@@ -46,9 +50,9 @@ class OSCActionListener {
       // appears, it implies we start filling the payload with subsequent
       // key value pairs
 
-      let actionPairs = msg.args;
+      const actionPairs = msg.args;
       let i;
-      let action = {};
+      const action = {};
       if (this.clientId) {
         action.clientId = this.clientId;
       }
@@ -69,6 +73,9 @@ class OSCActionListener {
       }
 
       this.store.dispatch(action);
+    });
+    this.oscPort.on("error", (err) => {
+      console.error(`OSCActionListener: OSC Port error:  ${err}`);
     });
     this.oscPort.open();
   }
