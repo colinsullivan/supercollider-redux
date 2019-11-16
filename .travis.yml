@@ -2,7 +2,8 @@ dist: xenial
 language: node_js
 before_install:
   - $TRAVIS_BUILD_DIR/.travis/install_system_audio.sh
-  - $TRAVIS_BUILD_DIR/.travis/prep-dummy-soundcard.sh
+  - sudo bash $TRAVIS_BUILD_DIR/.travis/prep-dummy-soundcard.sh
+  - jackd
   - $TRAVIS_BUILD_DIR/.travis/install_supercollider.sh
   - $TRAVIS_BUILD_DIR/.travis/install_supercolliderjs_config.sh
   - $TRAVIS_BUILD_DIR/.travis/install_quark.sh
