@@ -1,7 +1,5 @@
 /**
- *  @file       testSCStoreController.js
- *
- *	@desc       Tests the SCStoreController class.
+ *  @file       testSCReduxController.js
  *
  *  @author     Colin Sullivan <colin [at] colin-sullivan.net>
  *
@@ -37,48 +35,47 @@ var rootReducer = combineReducers({
   }
 });
 
-const {READY_STATES, SCLangController, SCStoreController} = SCRedux;
+const {READY_STATES, SCReduxController} = SCRedux;
 
-describe("SCStoreController", function() {
+describe("SCReduxController", function() {
   const store = createStore(rootReducer);
-  let sclangController, scStoreController;
-
-  before(function () {
-    sclangController = new SCLangController(store, {
+  const controller = new SCReduxController(store, {
       interpretOnLangBoot: `
 s.options.inDevice = "JackRouter";
 s.options.outDevice = "JackRouter";
 `
     });
-    scStoreController = new SCStoreController(store);
-  });
 
-  it("should have set store ready state on boot", function(done) {
+
+  it("should set store ready state during boot", function(done) {
     let state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT];
-
+    let lastState = state;
     expect(state.scStoreReadyState).to.equal(READY_STATES.NOT_STARTED);
 
-    sclangController.boot().then(() => {
-      scStoreController.init().then(() => {
-        state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT]
+    const unsub = store.subscribe(function () {
+      state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT];
+      if (state.scStoreReadyState !== lastState.scStoreReadyState) {
+        if (lastState.scStoreReadyState === READY_STATES.NOT_STARTED) {
+          expect(state.scStoreReadyState).to.equal(READY_STATES.INIT);
+        } else if (lastState.scStoreReadyState === READY_STATES.INIT) {
+          expect(state.scStoreReadyState).to.equal(READY_STATES.READY);
+          unsub();
+          done();
+        }
+      }
+      lastState = state;
+    });
 
-        expect(state.scStoreReadyState).to.equal(
-          READY_STATES.INIT
-        );
-        done();
-      }).catch(done);
-    }).catch(done);
+    controller.boot().catch(done);
 
   });
 
   var expectedInitTime = 750;
   it(`supercollider should respond in < ${expectedInitTime} ms`, function(done) {
     setTimeout(() => {
-      const state = store.getState();
+      const state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT];
 
-      expect(state[SCRedux.DEFAULT_MOUNT_POINT].scStoreReadyState).to.equal(
-        "READY"
-      );
+      expect(state.scStoreReadyState).to.equal(READY_STATES.READY);
       done();
     }, expectedInitTime);
   });
@@ -103,7 +100,7 @@ s.options.outDevice = "JackRouter";
       unsub();
       done();
     });
-    sclangController.getSCLang()
+    controller.getSCLang()
       .interpret(
         'SCReduxStore.getInstance().dispatch((type: "SCSTORECONTROLLER_TEST"))'
       )
@@ -117,7 +114,7 @@ s.options.outDevice = "JackRouter";
       unsub();
       done();
     });
-    sclangController.getSCLang()
+    controller.getSCLang()
       .interpret(
         'SCReduxStore.getInstance().dispatch((type: "SCSTORECONTROLLER_PAYLOAD_TEST", payload: (hello: "world")))'
       )
@@ -125,7 +122,6 @@ s.options.outDevice = "JackRouter";
   });
 
   after(function(done) {
-    scStoreController.quit();
-    sclangController.quit().then(() => done()).catch(done);
+    controller.quit().then(done).catch(done);
   });
 });

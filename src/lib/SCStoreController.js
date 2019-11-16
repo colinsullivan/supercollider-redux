@@ -20,7 +20,9 @@ import { DEFAULT_ACTION_LISTENER_PORT } from "./constants";
  **/
 class SCStoreController {
   /**
-   *  Creates an SCStoreController and sends `init` to SC.
+   *  Creates an SCStoreController and sends `init` to SC, creating an 
+   *  OSCActionListener to receive actions dispatched from the SCReduxStore
+   *  in SuperCollider and dispatch them to the store.
    *
    *  @param  {redux.Store}  store - The state store.
    *  @param  {Number}  props.actionListenerPort - The UDP port to listen for 
@@ -59,11 +61,12 @@ class SCStoreController {
       // Sets the SC store ready state
       this.store.dispatch(SCRedux.actions.scStoreInit());
 
+      // Connects the API to the API Quark (assumes sclang is running and ready)
       this.scapi.connect();
 
-      // send init message to the SC store once
+      // sends init message to the SC store once
       this.call("SCReduxStore.init", [this.store.getState()]).then(() => {
-        // send `setState` message to the SC store whenever state changes
+        // sends `setState` message to the SC store whenever state changes
         this.prevState = null;
         let state;
         this.unsubscribe = this.store.subscribe(() => {

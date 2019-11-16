@@ -5,6 +5,7 @@ import SCStoreController from "./lib/SCStoreController";
 import SCLangController from "./lib/SCLangController";
 import OSCActionListener from "./lib/OSCActionListener";
 import { READY_STATES, DEFAULT_MOUNT_POINT } from "./lib/constants";
+import SCReduxController from "./lib/SCReduxController";
 
 export default {
   actionTypes,
@@ -14,5 +15,6 @@ export default {
   SCStoreController,
   SCLangController,
   OSCActionListener,
+  SCReduxController,
   READY_STATES
 };
