@@ -3,7 +3,6 @@ language: node_js
 before_install:
   - $TRAVIS_BUILD_DIR/.travis/install_system_audio.sh
   - sudo bash $TRAVIS_BUILD_DIR/.travis/prep-dummy-soundcard.sh
-  - jackd -d dummy --help
   - jackd -d dummy
   - $TRAVIS_BUILD_DIR/.travis/install_supercollider.sh
   - $TRAVIS_BUILD_DIR/.travis/install_supercolliderjs_config.sh
