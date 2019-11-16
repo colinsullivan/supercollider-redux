@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-jackd -d dummy &
+jackd --no-realtime -d dummy &
