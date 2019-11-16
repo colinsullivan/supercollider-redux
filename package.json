@@ -29,7 +29,7 @@
     "@supercollider/lang": "^1.0.0-alpha.1",
     "@supercollider/scapi": "^1.0.0-alpha.2",
     "osc": "^2.3.1",
-    "redux": "^3.7.2"
+    "redux": "^4.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
