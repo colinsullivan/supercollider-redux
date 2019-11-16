@@ -29,9 +29,6 @@ class OSCActionListener {
     this.params = params;
     this.store = params.store;
     this.clientId = params.clientId || null;
-    this.init();
-  }
-  init() {
     //console.log(`binding to 0.0.0.0:${this.params.localPort}`);
     this.oscPort = new osc.UDPPort({
       localAddress: "127.0.0.1",
@@ -69,6 +66,9 @@ class OSCActionListener {
       }
 
       this.store.dispatch(action);
+    });
+    this.oscPort.on("error", (err) => {
+      console.error(`OSCActionListener: OSC Port error:  ${err}`);
     });
     this.oscPort.open();
   }

@@ -10,18 +10,18 @@ const rootReducer = combineReducers({
 
 describe("SCLangController", function() {
   const store = createStore(rootReducer);
-  let sclangController, scStoreController;
+  let sclangController;
 
-  it("should instantiate without starting sclang", function() {
+  before(function () {
     sclangController = new SCRedux.SCLangController(store, {
       interpretOnLangBoot: `
 s.options.inDevice = "JackRouter";
 s.options.outDevice = "JackRouter";
 `
     });
+  });
 
-
-    scStoreController = new SCRedux.SCStoreController(store);
+  it("should instantiate without starting sclang", function() {
     const state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT];
     expect(state.scLangReadyState).to.equal(SCRedux.READY_STATES.NOT_STARTED);
   });
@@ -38,11 +38,7 @@ s.options.outDevice = "JackRouter";
   });
 
   it("should finish booting", function(done) {
-    bootRes
-      .then(() => {
-        scStoreController.init().then(() => done()).catch(done);
-      })
-      .catch(done);
+    bootRes.then(() => done()).catch(done);
   });
 
   it("should have loaded our local quark", function(done) {
@@ -65,21 +61,8 @@ s.options.outDevice = "JackRouter";
     expect(state.scLangReadyState).to.equal(SCRedux.READY_STATES.READY);
   });
 
-  it("should change scsynth ready state when booted", function(done) {
-    const state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT];
-    expect(state.scSynthReadyState).to.equal(SCRedux.READY_STATES.INIT);
-    const unsub = store.subscribe(() => {
-      const newState = store.getState()[SCRedux.DEFAULT_MOUNT_POINT];
-      if (newState.scSynthReadyState !== state.scSynthReadyState) {
-        expect(newState.scSynthReadyState).to.equal(SCRedux.READY_STATES.READY);
-        unsub();
-        done();
-      }
-    });
-  });
-
-  it("Should quit sclang", function(done) {
-    scStoreController.quit();
+  after(function (done) {
+    //scStoreController.quit();
     const quitRes = sclangController.quit();
 
     expect(quitRes).to.be.an.instanceof(Promise);

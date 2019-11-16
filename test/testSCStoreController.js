@@ -37,28 +37,28 @@ var rootReducer = combineReducers({
   }
 });
 
-//function configure_store() {
-  //return createStore(rootReducer);
-//}
-
 const {READY_STATES, SCLangController, SCStoreController} = SCRedux;
 
 describe("SCStoreController", function() {
-
   const store = createStore(rootReducer);
-  let sclangController, scStoreController, sclang;
+  let sclangController, scStoreController;
 
+  before(function () {
+    sclangController = new SCLangController(store, {
+      interpretOnLangBoot: `
+s.options.inDevice = "JackRouter";
+s.options.outDevice = "JackRouter";
+`
+    });
+    scStoreController = new SCStoreController(store);
+  });
 
   it("should have set store ready state on boot", function(done) {
-    sclangController = new SCLangController(store);
-    scStoreController = new SCStoreController(store);
     let state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT];
 
     expect(state.scStoreReadyState).to.equal(READY_STATES.NOT_STARTED);
 
-    sclangController.boot().then((lang) => {
-      sclang = lang;
-
+    sclangController.boot().then(() => {
       scStoreController.init().then(() => {
         state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT]
 
@@ -67,12 +67,11 @@ describe("SCStoreController", function() {
         );
         done();
       }).catch(done);
-
     }).catch(done);
 
   });
 
-  var expectedInitTime = 450;
+  var expectedInitTime = 750;
   it(`supercollider should respond in < ${expectedInitTime} ms`, function(done) {
     setTimeout(() => {
       const state = store.getState();
@@ -84,6 +83,19 @@ describe("SCStoreController", function() {
     }, expectedInitTime);
   });
 
+  it("should change scsynth ready state when booted", function(done) {
+    const state = store.getState()[SCRedux.DEFAULT_MOUNT_POINT];
+    expect(state.scSynthReadyState).to.equal(SCRedux.READY_STATES.INIT);
+    const unsub = store.subscribe(() => {
+      const newState = store.getState()[SCRedux.DEFAULT_MOUNT_POINT];
+      if (newState.scSynthReadyState !== state.scSynthReadyState) {
+        expect(newState.scSynthReadyState).to.equal(SCRedux.READY_STATES.READY);
+        unsub();
+        done();
+      }
+    });
+  });
+
   it("should handle actions sent without a payload", function(done) {
     const unsub = store.subscribe(() => {
       const state = store.getState();
@@ -91,7 +103,7 @@ describe("SCStoreController", function() {
       unsub();
       done();
     });
-    sclang
+    sclangController.getSCLang()
       .interpret(
         'SCReduxStore.getInstance().dispatch((type: "SCSTORECONTROLLER_TEST"))'
       )
@@ -105,15 +117,15 @@ describe("SCStoreController", function() {
       unsub();
       done();
     });
-    sclang
+    sclangController.getSCLang()
       .interpret(
         'SCReduxStore.getInstance().dispatch((type: "SCSTORECONTROLLER_PAYLOAD_TEST", payload: (hello: "world")))'
       )
       .catch(done);
   });
 
-  it("should quit supercollider", function(done) {
+  after(function(done) {
     scStoreController.quit();
-    sclang.quit().then(() => done());
+    sclangController.quit().then(() => done()).catch(done);
   });
 });

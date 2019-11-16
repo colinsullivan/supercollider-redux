@@ -45,30 +45,28 @@ class SCStoreController {
       clientId: "supercollider"
     });
     this.scStateSelector = scStateSelector;
+
+    const api = new SCAPI();
+
+    this.scapi = api;
+
+    api.on("error", err => {
+      this.handle_api_error(err);
+    });
   }
   init () {
     return new Promise((res, rej) => {
       // Sets the SC store ready state
       this.store.dispatch(SCRedux.actions.scStoreInit());
 
-      // reads config file located at: ./.supercollider.yaml
-      const api = new SCAPI();
-
-      this.scapi = api;
-
-      api.on("error", err => {
-        this.handle_api_error(err);
-        rej(err);
-      });
-
-      api.connect();
+      this.scapi.connect();
 
       // send init message to the SC store once
       this.call("SCReduxStore.init", [this.store.getState()]).then(() => {
         // send `setState` message to the SC store whenever state changes
         this.prevState = null;
         let state;
-        this.store.subscribe(() => {
+        this.unsubscribe = this.store.subscribe(() => {
           state = this.scStateSelector(this.store.getState());
           if (this.prevState !== state) {
             this.prevState = state;
@@ -90,8 +88,15 @@ class SCStoreController {
       .call(undefined, apiMethodName, args);
   }
   quit() {
-    this.scapi.disconnect();
-    this.actionListener.quit();
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+    if (this.scapi) {
+      this.scapi.disconnect();
+    }
+    if (this.actionListener) {
+      this.actionListener.quit();
+    }
   }
 }
 

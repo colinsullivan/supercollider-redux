@@ -72,15 +72,13 @@ Server.quitAll();
       `
         )
         .then(() => {
-          setTimeout(() => {
-            this.sclang
-              .quit()
-              .then(() => {
-                this.store.dispatch(scLangQuit());
-                resolve();
-              })
-              .catch(reject);
-          }, 1000);
+          this.sclang
+            .quit()
+            .then(() => {
+              this.store.dispatch(scLangQuit());
+              resolve();
+            })
+            .catch(reject);
         })
         .catch(reject);
     });
