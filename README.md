@@ -4,23 +4,46 @@
 
 A library for state synchronization between SuperCollider and Node.js using the [Flux design pattern](https://facebook.github.io/flux/docs/in-depth-overview/).  State flows from a primary state store in Node.js to a replica in SuperCollider which can dispatch actions back to the Node.js store.
 
-![Basic state flow](docs/flow.png "Basic state flow")
-
 ## How it works
 Intended for use with a primary state store in Node.js implemented with [Redux](http://redux.js.org/).  Provides `StateStore`, a replica state store in [SuperCollider](http://supercollider.github.io/) which leverages [supercolliderjs](https://github.com/crucialfelix/supercolliderjs) and the [API quark](https://github.com/supercollider-quarks/API) to receive state changes.
 
 The Node.js class `SCStoreController` forwards state updates to a replica running in sclang and receives actions dispatched from it using a separate OSC channel.
 
+![Basic state flow](docs/flow.png "Basic state flow")
+
 When actions are dispatched from sclang to the replica `StateStore` instance, they are passed up to the primary Node.js store via OSC, any reducers written in Node.js can update the state which will then be forwarded back to the replica.  The primary / replica design promotes all state changes written as reducers in Redux, centralizing the state in the Node.js process.
 
-## SuperCollider Classes
+## SuperCollider API
 All SuperCollider code is included in a [quark](http://doc.sccode.org/Guides/UsingQuarks.html) inside the `quarks/supercollider-redux` directory.
 
+### `SCReduxStore`
+Implements the state store replica in SuperCollider.  Usage:
+
+```supercollider
+var store = SCReduxStore.getInstance();
+
+// Subscribing to state changes
+store.subscribe({
+    var state = store.getState();
+
+    // This method is called whenever state changes.
+});
+
+
+// Dispatching a message to the Node.js store
+store.dispatch((
+    type: MyActionTypes['HELLO_WORLD'],
+    payload: (
+        hello: "world"
+    )
+));
+```
+
+Other classes:
 * `SCRedux`: Used as a namespace for storing constants like actionTypes.
-* `SCReduxStore`: Class that implements the state store replica in SuperCollider.
 * `SCReduxTempoClockController`: A wrapper for TempoClock which will take a tempo from the Redux store.
 
-## JavaScript Interface
+## JavaScript API
 ### `reducer`
 A reducer is provided to store the ready states of the SCReduxStore, sclang, and scsynth:
 
