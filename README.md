@@ -1,6 +1,7 @@
 # supercollider-redux
 
 [![Build Status](https://travis-ci.com/colinsullivan/supercollider-redux.svg?branch=master)](https://travis-ci.com/colinsullivan/supercollider-redux)
+[![Coverage Status](https://coveralls.io/repos/github/colinsullivan/supercollider-redux/badge.svg?branch=master)](https://coveralls.io/github/colinsullivan/supercollider-redux?branch=master)
 
 A library for state synchronization between SuperCollider and Node.js using the [Flux design pattern](https://facebook.github.io/flux/docs/in-depth-overview/).  State flows from a primary state store in Node.js to a replica in SuperCollider which can dispatch actions back to the Node.js store.
 
