@@ -6,6 +6,7 @@
   "browser": "lib/index_browser.js",
   "scripts": {
     "test": "NODE_ENV=test nyc mocha --require @babel/register --require source-map-support/register --timeout 10000 --slow 4000 --bail",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "rm -Rf lib && babel src --out-dir lib",
     "build_docs": "plantuml -tpng docs/*.puml"
   },
@@ -40,6 +41,7 @@
     "babel-eslint": "^10.0.3",
     "babel-plugin-istanbul": "^5.2.0",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.7",
     "eslint": "^6.6.0",
     "mocha": "^6.2.2",
     "nyc": "^14.1.1",
