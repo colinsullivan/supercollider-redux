@@ -44,7 +44,7 @@ Other classes:
 * `SCRedux`: Used as a namespace for storing constants like actionTypes.
 * `SCReduxTempoClockController`: A wrapper for TempoClock which will take a tempo from the Redux store.
 
-## JavaScript API
+## Node.js API
 ### `reducer`
 A reducer is provided to store the ready states of the SCReduxStore, sclang, and scsynth:
 
@@ -90,6 +90,9 @@ s.options.outDevice = "JackRouter";
 ### Constants
 #### `READY_STATES`
 An enum with the possible values for the ready states of `scStoreReadyState`, `scLangReadyState`, `scSynthReadyState`.
+
+## Browser API
+The browser API exposes the subset of the functionality of supercollider-redux that may be relevant to a browser UI, the actions, reducers, and constants.  As a browser cannot spawn a SuperCollider process, the controller class is not exposed.
 
 
 ## Example Projects
