@@ -12,7 +12,7 @@
 
 SCReduxTempoClockController : Object {
   // the actual TempoClock instance
-  var <>clock,
+  var <clock,
     store,
     lastTempoBPM;
 
@@ -51,9 +51,6 @@ SCReduxTempoClockController : Object {
     store.subscribe({
       this.handleStateChange();
     });
-  }
-  isReady {
-    ^(clock != nil);
   }
 
   beats {
