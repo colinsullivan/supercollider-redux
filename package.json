@@ -27,10 +27,11 @@
   },
   "homepage": "https://github.com/colinsullivan/supercollider-redux#readme",
   "dependencies": {
-    "@supercollider/lang": "^1.0.0-alpha.1",
-    "@supercollider/scapi": "^1.0.0-alpha.2",
+    "@supercollider/lang": "^1.0.1",
+    "@supercollider/scapi": "^1.0.0",
     "osc": "^2.3.1",
-    "redux": "^4.0.4"
+    "redux": "^4.0.4",
+    "serialport": "^9.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
