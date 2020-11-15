@@ -35,12 +35,12 @@ class SCLangController {
 
     this.interpretOnLangBoot = `
 API.mountDuplexOSC();
+${interpretOnLangBoot}
 s.waitForBoot({
   SCReduxStore.getInstance().dispatch((
     type: SCRedux.actionTypes['SC_SYNTH_READY']
   ));
 });
-${interpretOnLangBoot}
     `;
 
     this.store = store;
